@@ -67,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
     private TextView txt_DisplayName;
     private ImageView img_State;
     private TextView txt_State;
+    private TextView txt_Daxem;
     private RecyclerView recyclerView;
     private MessengerAdapter adapter;
     private ArrayList<Messenger> arrayList;
@@ -88,6 +89,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         init();
+        checkSeen();
 
 
 
@@ -104,6 +106,7 @@ public class ChatActivity extends AppCompatActivity {
         txt_DisplayName = findViewById(R.id.txt_name_friend_chat_activity);
         txt_State = findViewById(R.id.txt_friend_state_chat_activity);
         img_State = findViewById(R.id.img_friend_state_chat_activity);
+        txt_Daxem=findViewById(R.id.txt_daxem);
         loadAnotherUser();
         getAnotherInChat();
 
@@ -176,7 +179,11 @@ public class ChatActivity extends AppCompatActivity {
                                 recyclerView.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                                        int last = recyclerView.getAdapter().getItemCount();
+                                        if (last>2){
+                                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                                        }
+
                                     }
                                 }, 100);
 
@@ -253,15 +260,17 @@ public class ChatActivity extends AppCompatActivity {
     private void sentMessenger(Map messageMap){
         String currenUserRef = "Messenger/" + currentUserId + "/" + anotherUserId;
         String anotherUserRef = "Messenger/" + anotherUserId + "/" + currentUserId;
+
         String currentLastMess = "LastMess/"+currentUserId+"/"+anotherUserId;
         String anotherLastMess = "LastMess/"+anotherUserId+"/"+currentUserId;
+
         DatabaseReference message_push = messengerReference.child(currenUserRef).child(anotherUserRef).push();
         String push_id = message_push.getKey();
         Map databaseMap = new HashMap();
         databaseMap.put(currenUserRef + "/" + push_id, messageMap);
         databaseMap.put(anotherUserRef + "/" + push_id, messageMap);
-        databaseMap.put(currentLastMess, messageMap);
         databaseMap.put(anotherLastMess, messageMap);
+        databaseMap.put(currentLastMess, messageMap);
         databaseReference.updateChildren(databaseMap);
     }
 
@@ -326,10 +335,56 @@ public class ChatActivity extends AppCompatActivity {
                 });
     }
 
+    private void updateSennLastMess(){
+        final Map lastMessMap = new HashMap();
+        lastMessMap.put("seen", "true");
+        databaseReference.child("LastMess").child(currentUserId).child(anotherUserId)
+                .updateChildren(lastMessMap).addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.isSuccessful()){
+                    databaseReference.child("LastMess").child(anotherUserId).child(currentUserId)
+                            .updateChildren(lastMessMap);
+                }
+            }
+        });
+
+
+
+    }
+
+    private void checkSeen(){
+        databaseReference.child("LastMess").child(currentUserId).child(anotherUserId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Messenger messenger = dataSnapshot.getValue(Messenger.class);
+                        String from = messenger.getFrom();
+                        String seen = messenger.getSeen();
+                        if (from.equals(currentUserId)){
+                            if (seen.equals("true")){
+                                txt_Daxem.setVisibility(View.VISIBLE);
+                            }else {
+                                txt_Daxem.setVisibility(View.GONE);
+                            }
+                        }else {
+                            txt_Daxem.setVisibility(View.GONE);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         updateStateInChat("online");
+        updateSennLastMess();
     }
 
     @Override

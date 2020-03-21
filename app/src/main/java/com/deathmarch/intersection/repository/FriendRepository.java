@@ -38,9 +38,9 @@ public class FriendRepository {
 
 
     public static FriendRepository getInstance() {
-       // if (instance == null) {
-            instance = new FriendRepository();
-       // }
+        // if (instance == null) {
+        instance = new FriendRepository();
+        // }
         return instance;
     }
 

@@ -108,6 +108,10 @@ public class SentRequestFriendAdapter extends RecyclerView.Adapter<SentRequestFr
     }
 
     private void HuyYeuCauKetBan(final String anotherUserId){
+        if (arrayList.size()==1){
+            arrayList.clear();
+            notifyDataSetChanged();
+        }
         currentUserId = FirebaseAuth.getInstance().getUid();
         friendsReference = FirebaseDatabase.getInstance().getReference("Friends");
         friendsReference.child(currentUserId).child(anotherUserId).removeValue().addOnCompleteListener(

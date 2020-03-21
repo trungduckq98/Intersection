@@ -53,6 +53,7 @@ public class ReceiveRequestAdapter extends RecyclerView.Adapter<ReceiveRequestAd
         this.arrayList.clear();
         this.arrayList.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -64,7 +65,7 @@ public class ReceiveRequestAdapter extends RecyclerView.Adapter<ReceiveRequestAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ReceiveRequestViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull  ReceiveRequestViewHolder holder, int position) {
         final UserMain userMain = arrayList.get(position);
         holder.txt_Displayname.setText(userMain.getUserDisplayName());
         Glide.with(context)
@@ -131,7 +132,10 @@ public class ReceiveRequestAdapter extends RecyclerView.Adapter<ReceiveRequestAd
     }
 
     private void Chapnhanketban(final String anotherUserId, final String displayName){
-
+        if (arrayList.size()==1){
+            arrayList.clear();
+            notifyDataSetChanged();
+        }
         currentUserId = FirebaseAuth.getInstance().getUid();
         friendsReference = FirebaseDatabase.getInstance().getReference("Friends");
         final HashMap<String, Object> friendMap = new HashMap<>();
@@ -147,6 +151,7 @@ public class ReceiveRequestAdapter extends RecyclerView.Adapter<ReceiveRequestAd
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()){
                                                acceptRequestFriend.isComplete(anotherUserId, displayName);
+
                                             }
                                         }
                                     }
@@ -159,6 +164,10 @@ public class ReceiveRequestAdapter extends RecyclerView.Adapter<ReceiveRequestAd
     }
 
     private void Tuchoiketban(final String anotherUserId){
+        if (arrayList.size()==1){
+            arrayList.clear();
+            notifyDataSetChanged();
+        }
         currentUserId = FirebaseAuth.getInstance().getUid();
         friendsReference = FirebaseDatabase.getInstance().getReference("Friends");
         friendsReference.child(currentUserId).child(anotherUserId).removeValue().addOnCompleteListener(
