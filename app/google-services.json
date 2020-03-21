@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "421978715785",
+    "firebase_url": "https://intersection-ce958.firebaseio.com",
+    "project_id": "intersection-ce958",
+    "storage_bucket": "intersection-ce958.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421978715785:android:143880e01ae1e732047858",
+        "android_client_info": {
+          "package_name": "com.deathmarch.intersection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421978715785-lmp9ep2d1pbqsrf8nqe099b90g73rfgf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deathmarch.intersection",
+            "certificate_hash": "75e758ac2f28206fbc02980af95d8bcccd61ae9f"
+          }
+        },
+        {
+          "client_id": "421978715785-poshq8batedc46tgs7lgnrvir42d8fde.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRuR1tvtPvUR9oe45J2ZmyFNbVbt_k2FY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "421978715785-poshq8batedc46tgs7lgnrvir42d8fde.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize">
+    <RelativeLayout
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/img_thump_5"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="4dp"
+
+             />
+
+        <ImageView
+            android:id="@+id/img_friend_state5"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+             />
+    </RelativeLayout>
+    <LinearLayout
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:padding="4dp"
+            android:id="@+id/ln_anotheruser"
+            android:weightSum="5"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="match_parent">
+            <TextView
+
+                android:textColor="#000000"
+                android:gravity="center|start"
+                android:layout_weight="3"
+                android:id="@+id/txt_diplayname5"
+                android:textSize="18sp"
+                android:singleLine="true"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"/>
+            <TextView
+                android:id="@+id/txt_state5"
+                android:gravity="center|start"
+                android:textSize="10sp"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2">
+
+            </TextView>
+
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/img_option5"
+            android:padding="4dp"
+            android:src="@drawable/ic_more_vert_black_24dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>

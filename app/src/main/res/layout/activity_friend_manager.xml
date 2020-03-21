@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".view.friend.FriendManagerActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_friend_manage"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:title="ChatApp"
+        app:titleTextColor="@color/colorAccent"
+        android:background="@drawable/back_ground">
+    </androidx.appcompat.widget.Toolbar>
+    <com.google.android.material.tabs.TabLayout
+        android:layout_width="match_parent"
+        android:id="@+id/tablayout_friend_manager"
+        android:layout_height="50dp"
+        android:background="@drawable/back_ground"/>
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager_friend_manager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

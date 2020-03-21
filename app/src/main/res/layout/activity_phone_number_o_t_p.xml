@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/back_ground"
+    android:weightSum="9"
+    tools:context=".view.PhoneNumberOTPActivity">
+    <LinearLayout
+        android:layout_weight="3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center|start"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/img_login"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:src="@drawable/meow" />
+        <TextView
+            android:id="@+id/txt_title_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="Register!!!"
+            android:textColor="#DF185C"
+            android:textSize="16sp"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
+        <LinearLayout
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:weightSum="3"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="#ffffff"
+            android:orientation="horizontal">
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/ccp"
+                android:background="#ffffff"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:ccp_defaultNameCode="vn"/>
+            <EditText
+                android:imeOptions="actionDone"
+                android:background="#ffffff"
+                android:id="@+id/edt_sdt"
+                android:layout_width="0dp"
+                android:inputType="number"
+                android:layout_height="48dp"
+                android:layout_weight="2"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/txt_messfailed"
+            android:visibility="gone"
+            android:layout_marginTop="8dp"
+            android:textSize="16dp"
+            android:padding="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:id="@+id/linner_sent_code"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_height="wrap_content">
+            <TextView
+
+                android:textSize="16dp"
+                android:padding="4dp"
+                android:text="Nhập mã code đã nhận được:"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:paddingStart="8dp"
+
+                android:hint="Code"
+                android:background="@drawable/stroke1"
+                app:counterEnabled = "true"
+                app:counterMaxLength="6"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/edt_code"
+                    android:inputType="textPassword"
+                    android:drawableStart="@drawable/ic_lock_black_24dp"
+                    android:drawablePadding="8dp"
+                    android:layout_height="match_parent"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/btn_sent_code"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="Sent Code"
+                android:textColor="#ffffff"
+                android:background="#4e4a4a"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/load"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btn_get_code"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Get Code"
+            android:textColor="#ffffff"
+            android:background="#4e4a4a"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+</LinearLayout>

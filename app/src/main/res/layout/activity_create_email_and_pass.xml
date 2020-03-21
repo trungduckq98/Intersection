@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/back_ground"
+    android:weightSum="9"
+    tools:context=".view.CreateEmailAndPassActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:gravity="center|start"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/img_login"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:src="@drawable/meow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="Create Email And Password!!!"
+            android:textColor="#DF185C"
+            android:textSize="16sp"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:paddingStart="8dp"
+            android:hint="Email"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:drawableStart="@drawable/ic_person_black_24dp"
+                android:id="@+id/edt_create_email"
+                android:drawablePadding="8dp"
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:paddingStart="8dp"
+            android:hint="Password"
+            app:passwordToggleEnabled="true"
+
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:inputType="textPassword"
+
+                android:singleLine="true"
+                android:id="@+id/edt_create_pass"
+                android:imeOptions="actionDone"
+                android:drawableStart="@drawable/ic_lock_black_24dp"
+                android:drawablePadding="8dp"
+                android:layout_height="match_parent"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:paddingStart="8dp"
+            android:hint="Re Input Password"
+            app:passwordToggleEnabled="true"
+
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:inputType="textPassword"
+
+                android:singleLine="true"
+                android:id="@+id/edt_create_pass2"
+                android:imeOptions="actionDone"
+                android:drawableStart="@drawable/ic_lock_black_24dp"
+                android:drawablePadding="8dp"
+                android:layout_height="match_parent"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <LinearLayout
+            android:padding="4dp"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            >
+            <ProgressBar
+                android:id="@+id/progress_create_email_and_pass"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/txt_state_create_email_and_pass"
+                android:layout_marginStart="8dp"
+
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+        <Button
+            android:id="@+id/btn_create_email_and_pass"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Create"
+            android:textColor="#ffffff"
+            android:background="#4e4a4a"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+</LinearLayout>

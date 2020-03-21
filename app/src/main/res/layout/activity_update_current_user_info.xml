@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.UpdateCurrentUserInfoActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_current_user_info"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/back_ground">
+    </androidx.appcompat.widget.Toolbar>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center|start"
+        android:layout_width="match_parent"
+        android:layout_height="160dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_thump_current_user_info"
+            android:layout_marginStart="12dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            app:civ_border_width="1dp"/>
+        <LinearLayout
+            android:weightSum="3"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2">
+                <TextView
+                    android:id="@+id/txt_displayname_current_user_info"
+                    android:textColor="#000000"
+                    android:paddingStart="20dp"
+                    android:textSize="32sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"/>
+    <LinearLayout
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:padding="4dp"
+            android:layout_gravity="center"
+            android:weightSum="10"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:padding="8dp"
+                android:gravity="center|start"
+                android:textSize="16sp"
+                android:text="Nhập họ tên"
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+            <EditText
+                android:singleLine="true"
+                android:maxLines="1"
+                android:id="@+id/edt_fullname_current_user_info"
+                android:layout_weight="6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+        <LinearLayout
+            android:padding="4dp"
+            android:layout_gravity="center"
+            android:weightSum="10"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:padding="8dp"
+                android:gravity="center|start"
+                android:textSize="16sp"
+                android:text="Nhập địa chỉ"
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+            <EditText
+                android:singleLine="true"
+                android:maxLines="1"
+                android:id="@+id/edt_address_current_user_info"
+                android:layout_weight="6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+        <LinearLayout
+            android:padding="4dp"
+            android:layout_gravity="center"
+            android:weightSum="10"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:padding="8dp"
+                android:gravity="center|start"
+                android:textSize="16sp"
+                android:text="Ngày sinh"
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+            <Button
+                android:id="@+id/btn_choose_date_current_user_info"
+                android:textAllCaps="false"
+                android:text="Chọn ngày"
+                android:background="@drawable/stroke1"
+                android:layout_weight="6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+        <LinearLayout
+            android:padding="4dp"
+            android:layout_gravity="center"
+            android:weightSum="10"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:padding="8dp"
+                android:gravity="center|start"
+                android:textSize="16sp"
+                android:text="Giới tính"
+                android:layout_weight="4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+            <Spinner
+                android:id="@+id/sp_choose_sex_current_user_info"
+                android:background="@drawable/stroke1"
+                android:layout_weight="6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+        <LinearLayout
+
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:background="@drawable/stroke2"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_weight="8">
+                <TextView
+                    android:layout_margin="8dp"
+                    android:textSize="16sp"
+                    android:text="Nhập mô tả:"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <EditText
+                    android:id="@+id/edt_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+                <Button
+                    android:id="@+id/btn_update_current_user_info"
+                    android:layout_marginTop="16dp"
+                    android:textAllCaps="false"
+                    android:text="Update"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+</LinearLayout>
