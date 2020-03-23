@@ -4,15 +4,15 @@ import com.google.firebase.database.ServerValue;
 
 public class Post {
     private String postUserId;
-    private String postName;
+    private String postId;
     private String postType;
     private String postImage;
     private String postText;
     private long postTime;
 
-    public Post(String postUserId, String postName, String postType, String postImage, String postText, long postTime) {
+    public Post(String postUserId, String postId, String postType, String postImage, String postText, long postTime) {
         this.postUserId = postUserId;
-        this.postName = postName;
+        this.postId = postId;
         this.postType = postType;
         this.postImage = postImage;
         this.postText = postText;
@@ -30,12 +30,12 @@ public class Post {
         this.postUserId = postUserId;
     }
 
-    public String getPostName() {
-        return postName;
+    public String getPostId() {
+        return postId;
     }
 
-    public void setPostName(String postName) {
-        this.postName = postName;
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 
     public String getPostType() {

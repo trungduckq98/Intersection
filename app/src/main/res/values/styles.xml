@@ -15,13 +15,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView">
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="ThemeDialogFragment">
-    <item name="windowActionBar">false</item>
-    <item name="colorPrimaryDark">#C5B5EA</item>
-        <item name="windowNoTitle">true</item></style>
+
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimaryDark">#C5B5EA</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_in_animation</item>
+        <item name="android:windowExitAnimation">@anim/dialog_out_animation</item>
+    </style>
 
 </resources>

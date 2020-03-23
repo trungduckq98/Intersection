@@ -27,7 +27,7 @@ public class PostDiffUtilCallback extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        return olds.get(oldItemPosition).getPostName().equals(news.get(newItemPosition).getPostName());
+        return olds.get(oldItemPosition).getPostId().equals(news.get(newItemPosition).getPostId());
     }
 
     @Override

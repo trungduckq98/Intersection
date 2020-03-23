@@ -86,15 +86,15 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void createPostText(String text){
         DatabaseReference message_push = myPostReference.push();
-        String postName = message_push.getKey();
+        String postId = message_push.getKey();
 
         Map textMap = new HashMap();
         textMap.put("postUserId", currentUserId);
-        textMap.put("postName", postName);
+        textMap.put("postId", postId);
         textMap.put("postType", "text");
         textMap.put("postText", text);
         textMap.put("postTime", ServerValue.TIMESTAMP);
-        myPostReference.child(postName).updateChildren(textMap).addOnCompleteListener(new OnCompleteListener() {
+        myPostReference.child(postId).updateChildren(textMap).addOnCompleteListener(new OnCompleteListener() {
             @Override
             public void onComplete(@NonNull Task task) {
                 if (task.isSuccessful()){
@@ -107,10 +107,10 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void createPostImage(){
         DatabaseReference message_push = myPostReference.push();
-        final String postName = message_push.getKey();
+        final String postId = message_push.getKey();
 
         final StorageReference filepath = FirebaseStorage.getInstance().getReference().
-                child("Post").child(currentUserId).child(postName);
+                child("Post").child(currentUserId).child(postId);
         UploadTask uploadTask = filepath.putFile(uri);
         uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
@@ -131,11 +131,11 @@ public class CreatePostActivity extends AppCompatActivity {
                     String downloadUrl = task.getResult().toString();
                     Map textMap = new HashMap();
                     textMap.put("postUserId", currentUserId);
-                    textMap.put("postName", postName);
+                    textMap.put("postId", postId);
                     textMap.put("postType", "image");
                     textMap.put("postImage", downloadUrl);
                     textMap.put("postTime", ServerValue.TIMESTAMP);
-                    myPostReference.child(postName).updateChildren(textMap).addOnCompleteListener(new OnCompleteListener() {
+                    myPostReference.child(postId).updateChildren(textMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (task.isSuccessful()){
@@ -157,9 +157,9 @@ public class CreatePostActivity extends AppCompatActivity {
 
     private void createPostDouble( final String text){
         DatabaseReference message_push = myPostReference.push();
-        final String postName = message_push.getKey();
+        final String postId = message_push.getKey();
         final StorageReference filepath = FirebaseStorage.getInstance().getReference().
-                child("Post").child(currentUserId).child(postName);
+                child("Post").child(currentUserId).child(postId);
         UploadTask uploadTask = filepath.putFile(uri);
         uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
@@ -180,12 +180,12 @@ public class CreatePostActivity extends AppCompatActivity {
                     String downloadUrl = task.getResult().toString();
                     Map textMap = new HashMap();
                     textMap.put("postUserId", currentUserId);
-                    textMap.put("postName", postName);
+                    textMap.put("postId", postId);
                     textMap.put("postType", "double");
                     textMap.put("postText", text);
                     textMap.put("postImage", downloadUrl);
                     textMap.put("postTime", ServerValue.TIMESTAMP);
-                    myPostReference.child(postName).updateChildren(textMap).addOnCompleteListener(new OnCompleteListener() {
+                    myPostReference.child(postId).updateChildren(textMap).addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
                             if (task.isSuccessful()){

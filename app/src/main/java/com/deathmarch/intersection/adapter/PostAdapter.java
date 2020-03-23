@@ -10,6 +10,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +22,8 @@ import com.deathmarch.intersection.model.GetTimeAgo;
 import com.deathmarch.intersection.model.Messenger;
 import com.deathmarch.intersection.model.Post;
 import com.deathmarch.intersection.model.UserMain;
+import com.deathmarch.intersection.view.PostDialogFragment;
+import com.deathmarch.intersection.view.SearchByEmailDialogFragment;
 import com.google.android.material.circularreveal.cardview.CircularRevealCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -117,7 +122,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     .into(holder.img_PostImage);
         }
 
-        postReference.child(post.getPostUserId()).child(post.getPostName()).addValueEventListener(new ValueEventListener() {
+        postReference.child(post.getPostUserId()).child(post.getPostId()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild("postLike")){
@@ -149,14 +154,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             @Override
             public void onClick(View v) {
                 if (holder.isLike==true){
-                    postReference.child(post.getPostUserId()).child(post.getPostName())
+                    postReference.child(post.getPostUserId()).child(post.getPostId())
                             .child("postLike").child(currentUserId).removeValue();
                 }else {
                     Map likeMap = new HashMap();
                     likeMap.put("likeTime", ServerValue.TIMESTAMP);
-                    postReference.child(post.getPostUserId()).child(post.getPostName())
+                    postReference.child(post.getPostUserId()).child(post.getPostId())
                             .child("postLike").child(currentUserId).updateChildren(likeMap);
                 }
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentActivity fragmentActivity = (FragmentActivity) context;
+                FragmentManager fragmentManager = fragmentActivity.getSupportFragmentManager();
+                PostDialogFragment postDialog  = PostDialogFragment.newInstane();
+                postDialog.sentPostId(post);
+                postDialog.show(fragmentManager, "duc");
             }
         });
 

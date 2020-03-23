@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
+        android:layout_alignParentTop="true"
+        android:id="@+id/relaytive_14"
         android:background="@drawable/back_ground"
         android:layout_width="match_parent"
         android:layout_height="50dp">
         <ImageButton
-            android:id="@+id/img_close_dialog_post"
+            android:id="@+id/img_close_dialog_post14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -23,33 +25,212 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
-            android:layout_toEndOf="@id/img_close_dialog_post"
+            android:layout_toEndOf="@id/img_close_dialog_post14"
             android:text="Bài viết"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
     </RelativeLayout>
     <androidx.core.widget.NestedScrollView
+        android:layout_below="@id/relaytive_14"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <LinearLayout
+                android:padding="4dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:padding="4dp"
+                    android:layout_gravity="center|start"
+                    android:id="@+id/img_thump14"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"/>
+                <LinearLayout
+                    android:weightSum="5"
+                    android:layout_marginStart="8dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:textColor="#000000"
+                        android:gravity="center|start"
+                        android:layout_weight="3"
+                        android:id="@+id/txt_diplayname14"
+                        android:textSize="18sp"
+                        android:singleLine="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2">
+                        <TextView
+                            android:layout_alignParentStart="true"
+                            android:textStyle="italic"
+                            android:id="@+id/txt_type14"
+                            android:gravity="center|start"
+                            android:textSize="12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        </TextView>
+                        <TextView
+                            android:textColor="@color/colorBlack"
+                            android:layout_marginEnd="16dp"
+                            android:layout_alignParentEnd="true"
+                            android:textStyle="italic"
+                            android:id="@+id/txt_time14"
+                            android:gravity="center|start"
+                            android:textSize="12sp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                        </TextView>
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/darker_gray"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
             <TextView
-                android:text="@string/test"
+                android:id="@+id/post_text14"
+                android:padding="4dp"
+                android:textSize="12sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <TextView
-                android:text="@string/test"
+            <ImageView
+                android:scaleType="matrix"
+                android:id="@+id/post_image14"
+                android:padding="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
-            <TextView
-                android:text="@string/test"
+
+            <LinearLayout
+                android:layout_marginTop="4dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:orientation="horizontal"
+                android:weightSum="6"
+                android:layout_width="match_parent"
+                android:layout_height="35dp">
+                <LinearLayout
+                    android:gravity="center"
+                    android:background="@drawable/stroke2"
+                    android:layout_marginEnd="2dp"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1">
+                    <ImageView
+                        android:src="@drawable/ic_heart_white"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"/>
+                    <TextView
+                        android:id="@+id/txt_count_like14"
+                        android:padding="4dp"
+                        android:textColor="@color/colorBlack"
+                        android:gravity="center"
+                        android:drawablePadding="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginStart="2dp"
+                    android:id="@+id/img_like14"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_heart_white"
+                    android:background="@drawable/stroke2"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="2"/>
+                <TextView
+                    android:layout_marginStart="2dp"
+                    android:id="@+id/txt_comment14"
+                    android:textColor="@color/colorBlack"
+                    android:gravity="center"
+                    android:text="Comment"
+
+                    android:layout_weight="3"
+                    android:background="@drawable/stroke2"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp" />
+
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_comment14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
+            <LinearLayout
+
+                android:background="@drawable/stroke8"
+                android:layout_alignParentBottom="true"
+                android:weightSum="10"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp">
+                <TextView
+                    android:textColor="@color/colorBlue"
+                    android:gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="Nhập bình luận:"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <EditText
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:id="@+id/edt_comment14"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/comment_input_type"
+                    android:layout_weight="6"
+                    android:paddingStart="8dp"
+                    android:textSize="12sp"
+                    android:maxLines="1"
+                    android:padding="4dp"
+                    android:singleLine="true" />
+
+                <ImageView
+                    android:id="@+id/btn_sent_comment14"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/ic_send_black_24dp" />
+            </LinearLayout>
+
+
         </LinearLayout>
+
+
+
     </androidx.core.widget.NestedScrollView>
 
 
-</LinearLayout>
+
+
+</RelativeLayout>
