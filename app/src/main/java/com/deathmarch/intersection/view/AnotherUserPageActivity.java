@@ -176,19 +176,19 @@ public class AnotherUserPageActivity extends AppCompatActivity {
                                 .error(R.drawable.image_user_defalse)
                                 .into(img_Thump);
                         txt_Displayname.setText(userMain.getUserDisplayName());
-                        txt_Email.append(userMain.getUserEmail());
+                        txt_Email.setText("Email: "+userMain.getUserEmail());
                         if (userInfo!=null){
-                            txt_Fullname.append(userInfo.getUserFullName());
-                            txt_Address.append(userInfo.getUserAddress());
-                            txt_DateBirth.append(userInfo.getUserDateOfbirth());
-                            txt_Sex.append(userInfo.getUserSex());
-                            txtDescription.append(userInfo.getUserDescription());
+                            txt_Fullname.setText("Họ tên: "+userInfo.getUserFullName());
+                            txt_Address.setText("Địa chỉ: "+userInfo.getUserAddress());
+                            txt_DateBirth.setText("Ngày sinh: "+userInfo.getUserDateOfbirth());
+                            txt_Sex.setText("Giới tính: "+userInfo.getUserSex());
+                            txtDescription.setText("Mô tả: "+userInfo.getUserDescription());
                         }else {
-                            txt_Fullname.append("<Chưa cập nhập>");
-                            txt_Address.append("<Chưa cập nhập>");
-                            txt_DateBirth.append("<Chưa cập nhập>");
-                            txt_Sex.append("<Chưa cập nhập>");
-                            txtDescription.append("<Chưa cập nhập>");
+                            txt_Fullname.setText("Họ tên: "+"<Chưa cập nhập>");
+                            txt_Address.setText("Địa chỉ: "+"<Chưa cập nhập>");
+                            txt_DateBirth.setText("Ngày sinh: "+"<Chưa cập nhập>");
+                            txt_Sex.setText("Giới tính: "+"<Chưa cập nhập>");
+                            txtDescription.setText("Mô tả: "+"<Chưa cập nhập>");
                         }
                     }
 

@@ -338,46 +338,86 @@ public class ChatActivity extends AppCompatActivity {
     private void updateSennLastMess(){
         final Map lastMessMap = new HashMap();
         lastMessMap.put("seen", "true");
-        databaseReference.child("LastMess").child(currentUserId).child(anotherUserId)
-                .updateChildren(lastMessMap).addOnCompleteListener(new OnCompleteListener() {
+        databaseReference.child("LastMess").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()){
-                    databaseReference.child("LastMess").child(anotherUserId).child(currentUserId)
-                            .updateChildren(lastMessMap);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(currentUserId+"/"+anotherUserId)){
+                    databaseReference.child("LastMess").child(currentUserId).child(anotherUserId)
+                            .updateChildren(lastMessMap).addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if (task.isSuccessful()){
+                                databaseReference.child("LastMess").child(anotherUserId).child(currentUserId)
+                                        .updateChildren(lastMessMap);
+                            }
+                        }
+                    });
                 }
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
         });
+
+
 
 
 
     }
 
     private void checkSeen(){
-        databaseReference.child("LastMess").child(currentUserId).child(anotherUserId)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Messenger messenger = dataSnapshot.getValue(Messenger.class);
-                        String from = messenger.getFrom();
-                        String seen = messenger.getSeen();
-                        if (from.equals(currentUserId)){
-                            if (seen.equals("true")){
-                                txt_Daxem.setVisibility(View.VISIBLE);
-                            }else {
-                                txt_Daxem.setVisibility(View.GONE);
-                            }
+        databaseReference.child("LastMess").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(currentUserId+"/"+anotherUserId)){
+                    Messenger messenger = dataSnapshot.child(currentUserId+"/"+anotherUserId).getValue(Messenger.class);
+                    String from = messenger.getFrom();
+                    String seen = messenger.getSeen();
+                    if (from.equals(currentUserId)){
+                        if (seen.equals("true")){
+                            txt_Daxem.setVisibility(View.VISIBLE);
                         }else {
                             txt_Daxem.setVisibility(View.GONE);
                         }
-
+                    }else {
+                        txt_Daxem.setVisibility(View.GONE);
                     }
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+            }
+        });
+
+
+//        databaseReference.child("LastMess").child(currentUserId).child(anotherUserId)
+//                .addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        Messenger messenger = dataSnapshot.getValue(Messenger.class);
+//                        String from = messenger.getFrom();
+//                        String seen = messenger.getSeen();
+//                        if (from.equals(currentUserId)){
+//                            if (seen.equals("true")){
+//                                txt_Daxem.setVisibility(View.VISIBLE);
+//                            }else {
+//                                txt_Daxem.setVisibility(View.GONE);
+//                            }
+//                        }else {
+//                            txt_Daxem.setVisibility(View.GONE);
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                });
     }
 
     @Override

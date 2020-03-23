@@ -10,4 +10,5 @@
     <color name="colorGreen">#10ED13</color>
     <color name="lightgray">#ededed</color>
     <color name="colorGray2">#A9AFAF</color>
+    <color name="colorDivider">#929E98</color>
 </resources>

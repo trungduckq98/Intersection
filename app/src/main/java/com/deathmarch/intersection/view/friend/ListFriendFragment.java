@@ -1,6 +1,8 @@
 package com.deathmarch.intersection.view.friend;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.deathmarch.intersection.R;
+import com.deathmarch.intersection.adapter.CountFriend;
 import com.deathmarch.intersection.adapter.FriendAdapter;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.viewmodel.FriendViewModel;
@@ -30,8 +33,18 @@ public class ListFriendFragment extends Fragment {
     FriendViewModel viewModel;
     ArrayList<UserMain> arrayList;
     FriendAdapter adapter;
+    CountFriend countFriend;
+
+
+
     public ListFriendFragment() {
 
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        countFriend = (CountFriend) context;
     }
 
     @Nullable
@@ -60,6 +73,9 @@ public class ListFriendFragment extends Fragment {
 
                 adapter.updateList(userMains);
                 adapter.notifyDataSetChanged();
+                countFriend.countFriend(userMains.size());
+
+
             }
         });
 

@@ -9,8 +9,11 @@
         android:roundIcon="@mipmap/ic_app_round"
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme">
-        <activity android:name=".view.ChatActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
+        <activity android:name=".view.MyPageActivity"></activity>
+        <activity android:name=".view.CreatePostActivity" />
+        <activity
+            android:name=".view.ChatActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".view.friend.FriendManagerActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />

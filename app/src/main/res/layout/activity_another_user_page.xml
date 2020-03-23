@@ -18,7 +18,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:gravity="center"
                 android:orientation="vertical"
@@ -246,7 +246,7 @@
                     android:drawablePadding="4dp"
                     android:drawableLeft="@drawable/ic_person_black_16dp"
                     android:padding="4dp"
-                    android:text="Họ tên: "
+
                     android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -256,7 +256,7 @@
                     android:drawablePadding="4dp"
                     android:drawableLeft="@drawable/ic_home_black_16dp"
                     android:padding="4dp"
-                    android:text="Địa chỉ: "
+
                     android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -266,7 +266,7 @@
                     android:drawablePadding="4dp"
                     android:drawableLeft="@drawable/ic_sort_black_16dp"
                     android:padding="4dp"
-                    android:text="Ngày sinh: "
+
                     android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -276,7 +276,7 @@
                     android:drawablePadding="4dp"
                     android:drawableLeft="@drawable/ic_wc_black_16dp"
                     android:padding="4dp"
-                    android:text="Giới tính: "
+
                     android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -286,7 +286,7 @@
                     android:drawablePadding="4dp"
                     android:drawableLeft="@drawable/ic_email_black_16dp"
                     android:padding="4dp"
-                    android:text="Email: "
+
                     android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
@@ -296,7 +296,7 @@
                     android:drawablePadding="4dp"
                     android:drawableLeft="@drawable/ic_description_black_16dp"
                     android:padding="4dp"
-                    android:text="Mô tả: "
+
                     android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

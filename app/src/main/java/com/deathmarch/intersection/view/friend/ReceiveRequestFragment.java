@@ -1,5 +1,6 @@
 package com.deathmarch.intersection.view.friend;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.adapter.AcceptRequestFriend;
+import com.deathmarch.intersection.adapter.CountFriend;
 import com.deathmarch.intersection.adapter.ReceiveRequestAdapter;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.view.AnotherUserPageActivity;
@@ -45,6 +47,12 @@ public class ReceiveRequestFragment extends Fragment implements AcceptRequestFri
     private AcceptRequestFriend acceptRequestFriend =this;
 
     public ReceiveRequestFragment(){
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
     }
 
     @Nullable
@@ -76,6 +84,7 @@ public class ReceiveRequestFragment extends Fragment implements AcceptRequestFri
                 Log.d("trungduc","size:"+ userMains.size());
                 adapter.updateList(userMains);
                 adapter.notifyDataSetChanged();
+
             }
         });
 

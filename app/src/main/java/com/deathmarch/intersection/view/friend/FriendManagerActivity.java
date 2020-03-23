@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.deathmarch.intersection.R;
+import com.deathmarch.intersection.adapter.CountFriend;
 import com.deathmarch.intersection.view.SearchActivity;
 import com.google.android.material.tabs.TabLayout;
 
-public class FriendManagerActivity extends AppCompatActivity {
+public class FriendManagerActivity extends AppCompatActivity implements CountFriend {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -86,4 +88,18 @@ public class FriendManagerActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_search, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+
+    @Override
+    public void countFriend(int count) {
+        if (count!=0){
+            tabLayout.getTabAt(0).setText("Bạn bè"+"("+count+")");
+        }else {
+            tabLayout.getTabAt(0).setText("Bạn bè");
+        }
+    }
+
+
+
+
 }

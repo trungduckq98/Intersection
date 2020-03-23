@@ -1,5 +1,6 @@
 package com.deathmarch.intersection.view.friend;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.deathmarch.intersection.R;
+import com.deathmarch.intersection.adapter.CountFriend;
 import com.deathmarch.intersection.adapter.SentRequestFriendAdapter;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.viewmodel.FriendViewModel;
@@ -37,7 +39,14 @@ public class SendRequestFragment extends Fragment {
 
 
 
+
     public SendRequestFragment() {
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
     }
 
     @Nullable
@@ -69,6 +78,8 @@ public class SendRequestFragment extends Fragment {
             public void onChanged(ArrayList<UserMain> userMains) {
                 adapter.updateList(userMains);
                 adapter.notifyDataSetChanged();
+
+
             }
         });
 

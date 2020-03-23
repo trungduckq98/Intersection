@@ -1,30 +1,23 @@
 package com.deathmarch.intersection;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.QuickContactBadge;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.deathmarch.intersection.view.CreateUserProfileActivity;
+import com.deathmarch.intersection.view.CreatePostActivity;
 import com.deathmarch.intersection.view.LauncherActivity;
 import com.deathmarch.intersection.view.LoginActivity;
+import com.deathmarch.intersection.view.MyPageActivity;
+import com.deathmarch.intersection.view.SearchByEmailDialogFragment;
 import com.deathmarch.intersection.view.friend.FriendManagerActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
@@ -62,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), CreateUserProfileActivity.class));
+                DialogFragment searchDialog  = SearchByEmailDialogFragment.newInstance();
+               searchDialog.show(getSupportFragmentManager(), "tag");
             }
         });
 
@@ -70,6 +64,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), FriendManagerActivity.class));
+            }
+        });
+
+        btn5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), CreatePostActivity.class));
+            }
+        });
+
+        btn6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MyPageActivity.class));
             }
         });
 
