@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.deathmarch.intersection.R;
@@ -27,6 +28,7 @@ import com.deathmarch.intersection.model.User;
 import com.deathmarch.intersection.model.UserInfo;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.viewmodel.PostViewModel;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -103,7 +105,7 @@ public class MyPageActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
 
         ArrayList<Post> arrayList = new ArrayList<>();
-        adapter = new PostAdapter(this, arrayList);
+        adapter = new PostAdapter(this, arrayList, recyclerView);
         recyclerView.setAdapter(adapter);
 
     }
@@ -195,4 +197,6 @@ public class MyPageActivity extends AppCompatActivity {
                 }
         );
     }
+
+
 }

@@ -24,15 +24,30 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <TextView
-                android:textColor="#000000"
-                android:gravity="center|start"
-                android:layout_weight="3"
-                android:id="@+id/txt_diplayname13"
-                android:textSize="18sp"
-                android:singleLine="true"
+            <LinearLayout
+                android:weightSum="5"
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"/>
+                android:layout_height="0dp"
+                android:layout_weight="3">
+                <TextView
+                    android:layout_weight="4"
+                    android:textColor="#000000"
+                    android:gravity="center|start"
+                    android:id="@+id/txt_diplayname13"
+                    android:textSize="18sp"
+                    android:singleLine="true"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"/>
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/img_option13"
+                    android:src="@drawable/ic_more_horiz_black_24dp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

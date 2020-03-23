@@ -50,7 +50,13 @@ public class PostRepository {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                Post post = dataSnapshot.getValue(Post.class);
+                for (int i=0;i<arrPost.size();i++){
+                    if (arrPost.get(i).getPostId().equals(post.getPostId())){
+                        arrPost.remove(arrPost.get(i));
+                        liveDataPost.setValue(arrPost);
+                    }
+                }
             }
 
             @Override

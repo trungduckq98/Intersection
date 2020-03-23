@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ import com.deathmarch.intersection.model.Post;
 import com.deathmarch.intersection.model.UserMain;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -69,6 +71,7 @@ public class PostDialogFragment extends DialogFragment {
     DatabaseReference currentPostReference;
     RecyclerView recyclerView;
     CommentAdapter adapter;
+    ImageView img_option;
 
     public static PostDialogFragment newInstane(){
         return new PostDialogFragment();
@@ -120,6 +123,7 @@ public class PostDialogFragment extends DialogFragment {
         txt_Comment = view.findViewById(R.id.txt_comment14);
         edt_Cmt_Content = view.findViewById(R.id.edt_comment14);
         btn_Sent_Cmt = view.findViewById(R.id.btn_sent_comment14);
+        img_option = view.findViewById(R.id.img_option14);
 
         recyclerView=view.findViewById(R.id.recycler_comment14);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -174,6 +178,17 @@ public class PostDialogFragment extends DialogFragment {
     }
 
     private void eventPost() {
+
+        if (post.getPostUserId().equals(currentUserId)){
+            img_option.setVisibility(View.VISIBLE);
+        }
+
+        img_option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBottomSheetDialog();
+            }
+        });
 
         usersReference.child(post.getPostUserId()).child("UserMain").addValueEventListener(new ValueEventListener() {
             @Override
@@ -301,6 +316,19 @@ public class PostDialogFragment extends DialogFragment {
                     }
                 });
 
+    }
+
+    private void showBottomSheetDialog(){
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+        bottomSheetDialog.setContentView(R.layout.post_option_bottom_sheet_dialog);
+        LinearLayout delete_post = bottomSheetDialog.findViewById(R.id.delete_post);
+        delete_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Xóa bài đăng", Toast.LENGTH_SHORT).show();
+            }
+        });
+        bottomSheetDialog.show();
     }
 
 
