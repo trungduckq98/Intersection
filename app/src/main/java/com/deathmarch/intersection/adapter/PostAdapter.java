@@ -1,6 +1,7 @@
 package com.deathmarch.intersection.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +20,17 @@ import com.deathmarch.intersection.model.Messenger;
 import com.deathmarch.intersection.model.Post;
 import com.deathmarch.intersection.model.UserMain;
 import com.google.android.material.circularreveal.cardview.CircularRevealCardView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,7 +38,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     Context context;
     private ArrayList<Post> arrayList;
 
-    DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("Users");
+    String currentUserId = FirebaseAuth.getInstance().getUid();
+    DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+    DatabaseReference postReference = FirebaseDatabase.getInstance().getReference().child("Post");
 
 
     public PostAdapter(Context context, ArrayList<Post> arrayList) {
@@ -59,10 +66,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final PostViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final PostViewHolder holder, final int position) {
         holder.setIsRecyclable(false);
+        final boolean isLike;
         final Post post = arrayList.get(position);
-        users.child(post.getPostUserId()).child("UserMain").addValueEventListener(new ValueEventListener() {
+        usersReference.child(post.getPostUserId()).child("UserMain").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserMain userMain = dataSnapshot.getValue(UserMain.class);
@@ -86,20 +94,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         final String type = post.getPostType();
 
 
-        if (type.equals("double")){
+        if (type.equals("double")) {
             holder.txt_Type.setText("Đã thêm bài đăng mới");
-            holder.txt_PostText.setText("   "+post.getPostText());
+            holder.txt_PostText.setText("   " + post.getPostText());
             Glide.with(context)
                     .load(post.getPostImage())
                     .placeholder(R.drawable.image_user_defalse)
                     .error(R.drawable.image_user_defalse)
                     .into(holder.img_PostImage);
 
-        }else if (type.equals("text")){
+        } else if (type.equals("text")) {
             holder.txt_Type.setText("Đã thêm bài đăng mới");
             holder.img_PostImage.setVisibility(View.GONE);
-            holder.txt_PostText.setText("   "+post.getPostText());
-        }else if (type.equals("image")){
+            holder.txt_PostText.setText("   " + post.getPostText());
+        } else if (type.equals("image")) {
             holder.txt_Type.setText("Đã thêm một ảnh mới");
             holder.txt_PostText.setVisibility(View.GONE);
             Glide.with(context)
@@ -109,6 +117,48 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     .into(holder.img_PostImage);
         }
 
+        postReference.child(post.getPostUserId()).child(post.getPostName()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild("postLike")){
+                   long countLike = dataSnapshot.child("postLike").getChildrenCount();
+                    holder.txt_CountLike.setText(""+countLike);
+                }else {
+                    holder.txt_CountLike.setText(""+0);
+                }
+
+
+
+                if (dataSnapshot.hasChild("postLike/"+currentUserId)){
+                    holder.img_Like.setImageResource(R.drawable.ic_heart_pink);
+                    holder.isLike = true;
+                }else {
+                    holder.img_Like.setImageResource(R.drawable.ic_heart_white);
+                    holder.isLike=false;
+                }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        holder.img_Like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.isLike==true){
+                    postReference.child(post.getPostUserId()).child(post.getPostName())
+                            .child("postLike").child(currentUserId).removeValue();
+                }else {
+                    Map likeMap = new HashMap();
+                    likeMap.put("likeTime", ServerValue.TIMESTAMP);
+                    postReference.child(post.getPostUserId()).child(post.getPostName())
+                            .child("postLike").child(currentUserId).updateChildren(likeMap);
+                }
+            }
+        });
 
 
     }
@@ -118,15 +168,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         return arrayList.size();
     }
 
-    public class PostViewHolder extends RecyclerView.ViewHolder{
+    public class PostViewHolder extends RecyclerView.ViewHolder {
+        boolean isLike;
         CircleImageView img_Thump;
         TextView txt_Displayname;
         TextView txt_Type;
         TextView txt_Time;
         TextView txt_PostText;
         ImageView img_PostImage;
+        TextView txt_CountLike;
         ImageView img_Like;
         TextView txt_Comment;
+
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -134,10 +187,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             txt_Displayname = itemView.findViewById(R.id.txt_diplayname13);
             txt_Type = itemView.findViewById(R.id.txt_type13);
             txt_Time = itemView.findViewById(R.id.txt_time13);
-            txt_PostText=itemView.findViewById(R.id.post_text13);
-            img_PostImage= itemView.findViewById(R.id.post_image13);
-            img_Like =itemView.findViewById(R.id.img_like13);
-            txt_Comment=itemView.findViewById(R.id.txt_comment13);
+            txt_PostText = itemView.findViewById(R.id.post_text13);
+            img_PostImage = itemView.findViewById(R.id.post_image13);
+            txt_CountLike = itemView.findViewById(R.id.txt_count_like13);
+            img_Like = itemView.findViewById(R.id.img_like13);
+            txt_Comment = itemView.findViewById(R.id.txt_comment13);
+
         }
     }
 }
