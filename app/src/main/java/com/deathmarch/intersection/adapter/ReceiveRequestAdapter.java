@@ -38,12 +38,11 @@ public class ReceiveRequestAdapter extends RecyclerView.Adapter<ReceiveRequestAd
     private String currentUserId;
     private DatabaseReference  friendsReference;
     Context context;
-    ArrayList<UserMain> arrayList;
+    ArrayList<UserMain> arrayList = new ArrayList<>();
     private AcceptRequestFriend acceptRequestFriend;
 
-    public ReceiveRequestAdapter(Context context, ArrayList<UserMain> arrayList, AcceptRequestFriend acceptRequestFriend) {
+    public ReceiveRequestAdapter(Context context, AcceptRequestFriend acceptRequestFriend) {
         this.context = context;
-        this.arrayList = arrayList;
         this.acceptRequestFriend = acceptRequestFriend;
     }
 

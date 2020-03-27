@@ -91,6 +91,7 @@ public class CreatePostActivity extends AppCompatActivity {
         Map textMap = new HashMap();
         textMap.put("postUserId", currentUserId);
         textMap.put("postId", postId);
+        textMap.put("hasImage", "false");
         textMap.put("postType", "text");
         textMap.put("postText", text);
         textMap.put("postTime", ServerValue.TIMESTAMP);
@@ -132,6 +133,7 @@ public class CreatePostActivity extends AppCompatActivity {
                     Map textMap = new HashMap();
                     textMap.put("postUserId", currentUserId);
                     textMap.put("postId", postId);
+                    textMap.put("hasImage", "true");
                     textMap.put("postType", "image");
                     textMap.put("postImage", downloadUrl);
                     textMap.put("postTime", ServerValue.TIMESTAMP);
@@ -182,6 +184,7 @@ public class CreatePostActivity extends AppCompatActivity {
                     textMap.put("postUserId", currentUserId);
                     textMap.put("postId", postId);
                     textMap.put("postType", "double");
+                    textMap.put("hasImage", "true");
                     textMap.put("postText", text);
                     textMap.put("postImage", downloadUrl);
                     textMap.put("postTime", ServerValue.TIMESTAMP);

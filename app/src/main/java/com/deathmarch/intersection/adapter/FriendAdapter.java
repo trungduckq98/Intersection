@@ -34,12 +34,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {
     private DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
-    private ArrayList<UserMain> arrayList;
+    private ArrayList<UserMain> arrayList = new ArrayList<>();
     private Context context;
 
-
-    public FriendAdapter(Context context, ArrayList<UserMain> arrayList) {
-        this.arrayList = arrayList;
+    public FriendAdapter(Context context) {
         this.context = context;
     }
 
@@ -49,6 +47,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         this.arrayList.clear();
         this.arrayList.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
+        notifyDataSetChanged();
     }
 
 

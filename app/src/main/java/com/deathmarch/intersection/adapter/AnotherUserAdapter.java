@@ -23,16 +23,27 @@ import com.deathmarch.intersection.model.User;
 import com.deathmarch.intersection.view.AnotherUserPageActivity;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AnotherUserAdapter extends RecyclerView.Adapter<AnotherUserAdapter.AnotherUserViewHolder> {
     Context context;
-    ArrayList<User> arrayList;
+    ArrayList<User> arrayList = new ArrayList<>();
 
-    public AnotherUserAdapter(Context context, ArrayList<User> arrayList) {
+    public AnotherUserAdapter(Context context) {
         this.context = context;
-        this.arrayList = arrayList;
+    }
+
+    public void updateList(Set set){
+        ArrayList<User> newsList = new ArrayList<>();
+        newsList.addAll(set);
+        ListUserDiffUtilCallback callback = new ListUserDiffUtilCallback(arrayList, newsList);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback);
+        this.arrayList.clear();
+        this.arrayList.addAll(newsList);
+        diffResult.dispatchUpdatesTo(this);
+        notifyDataSetChanged();
     }
 
 
@@ -58,12 +69,14 @@ public class AnotherUserAdapter extends RecyclerView.Adapter<AnotherUserAdapter.
                 .error(R.drawable.image_user_defalse)
                 .into(holder.imgThump);
         holder.txt_DisplayName.setText(arrayList.get(position).getUserMain().getUserDisplayName());
+
         if (arrayList.get(position).getUserInfo() != null) {
             holder.txt_FullName.setText(arrayList.get(position).getUserInfo().getUserFullName());
         } else {
             holder.txt_FullName.setText("Chưa cập nhật");
         }
 
+        //handler event
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

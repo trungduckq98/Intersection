@@ -13,12 +13,18 @@ import java.util.ArrayList;
 public class MessengerViewModel extends ViewModel {
     private LiveData<ArrayList<Messenger>> liveDataMessenger;
     private MessengerRepository messengerRepository = MessengerRepository.getInstance();
-    public void init(String anotherUserId){
-        liveDataMessenger = messengerRepository.getLivedataMessenger(anotherUserId);
-    }
 
-    public LiveData<ArrayList<Messenger>> getLiveDataMessenger(){
+
+    public LiveData<ArrayList<Messenger>> getLiveDataMessenger(String anotherUserId){
+        if (liveDataMessenger==null){
+            liveDataMessenger = messengerRepository.getLivedataMessenger(anotherUserId);
+        }
         return liveDataMessenger;
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        messengerRepository.deleteListener();
+    }
 }

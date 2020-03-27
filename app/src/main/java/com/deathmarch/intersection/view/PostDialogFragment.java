@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,7 +31,10 @@ import com.deathmarch.intersection.adapter.CommentAdapter;
 import com.deathmarch.intersection.model.Comment;
 import com.deathmarch.intersection.model.GetTimeAgo;
 import com.deathmarch.intersection.model.Post;
+import com.deathmarch.intersection.model.User;
 import com.deathmarch.intersection.model.UserMain;
+import com.deathmarch.intersection.viewmodel.CommentViewModel;
+import com.deathmarch.intersection.viewmodel.UserViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -77,9 +82,7 @@ public class PostDialogFragment extends DialogFragment {
         return new PostDialogFragment();
     }
 
-    public void sentPostId(Post post){
-        this.post = post;
-    }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,10 +101,14 @@ public class PostDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.dialog_fragment_post, container, false);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
+        Bundle bundle = getArguments();
+        post = (Post) bundle.getSerializable("post");
+        Log.d("kkkkkkkkkkk", post.getPostUserId());
         init();
+        loadUserCreatePost();
         eventPost();
         eventHandler();
+        getArrComment(post.getPostUserId(), post.getPostId());
 
         return view;
     }
@@ -130,6 +137,25 @@ public class PostDialogFragment extends DialogFragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new CommentAdapter(getActivity());
         recyclerView.setAdapter(adapter);
+
+    }
+
+    private void loadUserCreatePost(){
+        UserViewModel viewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+        viewModel.getLiveDataUser(post.getPostUserId()).observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                UserMain userMain = user.getUserMain();
+                txt_Displayname.setText(userMain.getUserDisplayName());
+
+                Glide.with(getContext())
+                        .load(userMain.getUserImage())
+                        .placeholder(R.drawable.image_user_defalse)
+                        .error(R.drawable.image_user_defalse)
+                        .into(img_Thump);
+            }
+        });
+
 
     }
 
@@ -190,30 +216,11 @@ public class PostDialogFragment extends DialogFragment {
             }
         });
 
-        usersReference.child(post.getPostUserId()).child("UserMain").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserMain userMain = dataSnapshot.getValue(UserMain.class);
-                txt_Displayname.setText(userMain.getUserDisplayName());
-                Glide.with(getActivity())
-                        .load(userMain.getUserImage())
-                        .placeholder(R.drawable.image_user_defalse)
-                        .error(R.drawable.image_user_defalse)
-                        .into(img_Thump);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         GetTimeAgo getTimeAgo = new GetTimeAgo();
         final String postTime = getTimeAgo.getTimeAgo(post.getPostTime());
         txt_Time.setText(postTime);
         final String type = post.getPostType();
-
-
         if (type.equals("double")) {
             txt_Type.setText("Đã thêm bài đăng mới");
             txt_PostText.setText("   " + post.getPostText());
@@ -280,41 +287,20 @@ public class PostDialogFragment extends DialogFragment {
         });
 
         //event handler comment
-        getArrComment(post.getPostUserId(), post.getPostId());
+
 
 
     }
 
     private void getArrComment(String postUserId, String postId){
-        postReference.child(postUserId).child(postId).child("postComment")
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        Comment comment = dataSnapshot.getValue(Comment.class);
-                         adapter.addComment(comment);
-
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+        CommentViewModel commentViewModel = ViewModelProviders.of(this).get(CommentViewModel.class);
+        commentViewModel.getLiveDataComment(postUserId, postId).observe(this, new Observer<ArrayList<Comment>>() {
+            @Override
+            public void onChanged(ArrayList<Comment> comments) {
+                Log.d("vvvvvvvvvvv", " size: "+comments.size());
+                adapter.updateList(comments);
+            }
+        });
 
     }
 

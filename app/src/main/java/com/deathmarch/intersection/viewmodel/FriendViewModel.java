@@ -1,5 +1,7 @@
 package com.deathmarch.intersection.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -15,32 +17,31 @@ public class FriendViewModel extends ViewModel {
 
     private FriendRepository friendRepository = FriendRepository.getInstance();
 
-    public void initFriend(){
+    public LiveData<ArrayList<UserMain>> getLiveDataFriend(String currentUserId){
         if (liveDataFriend==null){
-            liveDataFriend = friendRepository.getLivedataUserFriend();
+            liveDataFriend = friendRepository.getLivedataUserFriend(currentUserId);
         }
-    }
-    public LiveData<ArrayList<UserMain>> getLiveDataFriend(){
         return liveDataFriend;
     }
 
-    public void initReceive(){
-      //  if (liveDataReceive==null){
-            liveDataReceive = friendRepository.getLivedataUserReceive();
-     //  }
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        friendRepository.deleteListener();
     }
 
-    public LiveData<ArrayList<UserMain>> getLiveDataReceive(){
+        public LiveData<ArrayList<UserMain>> getLiveDataReceive(String currentUserId){
+        if (liveDataReceive==null){
+            liveDataReceive = friendRepository.getLivedataUserReceive(currentUserId);
+        }
         return liveDataReceive;
     }
 
-    public void initSend(){
-        if (liveDataSend==null){
-            liveDataSend = friendRepository.getLivedataUserSend();
-        }
-    }
 
-    public LiveData<ArrayList<UserMain>> getLiveDataSend(){
+    public LiveData<ArrayList<UserMain>> getLiveDataSend(String currentUserId){
+        if (liveDataSend==null){
+            liveDataSend=friendRepository.getLivedataUserSend(currentUserId);
+        }
         return liveDataSend;
     }
 

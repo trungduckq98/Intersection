@@ -109,6 +109,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ln_viewimage12"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:layout_width="0dp"

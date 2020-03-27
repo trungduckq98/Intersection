@@ -28,15 +28,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 
 public class ListFriendFragment extends Fragment {
-    View view;
-    RecyclerView recyclerView;
-    FriendViewModel viewModel;
-    ArrayList<UserMain> arrayList;
-    FriendAdapter adapter;
-    CountFriend countFriend;
-
-
-
+     private View view;
+    private  RecyclerView recyclerView;
+    private  FriendViewModel viewModel;
+    private  FriendAdapter adapter;
+    private  CountFriend countFriend;
     public ListFriendFragment() {
 
     }
@@ -51,35 +47,33 @@ public class ListFriendFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_list_friend, container, false);
-        init();
+        setUpRecyclerView();
         return view;
     }
 
-    private void init() {
+    private void setUpRecyclerView() {
         recyclerView = view.findViewById(R.id.recycler_list_friend);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        arrayList = new ArrayList<>();
-        adapter = new FriendAdapter(getContext(), arrayList);
+        adapter = new FriendAdapter(getContext());
         recyclerView.setAdapter(adapter);
+
+       //view model
         viewModel = ViewModelProviders.of(this).get(FriendViewModel.class);
-        viewModel.initFriend();
-        viewModel.getLiveDataFriend().observe(this, new Observer<ArrayList<UserMain>>() {
+        viewModel.getLiveDataFriend(FirebaseAuth.getInstance().getUid()).observe(this, new Observer<ArrayList<UserMain>>() {
             @Override
             public void onChanged(ArrayList<UserMain> userMains) {
-
+                Log.d("kienquoc", "FRIEND: fragment co data ");
                 adapter.updateList(userMains);
-                adapter.notifyDataSetChanged();
                 countFriend.countFriend(userMains.size());
-
-
             }
         });
 
     }
+
 
 
 }

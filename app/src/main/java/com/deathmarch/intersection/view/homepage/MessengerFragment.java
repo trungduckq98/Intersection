@@ -52,7 +52,7 @@ public class MessengerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-         view = inflater.inflate(R.layout.fragment_messenger, container, false);
+        view = inflater.inflate(R.layout.fragment_messenger, container, false);
         init();
         firebaseConnect();
         getListUserChat();
@@ -112,7 +112,7 @@ public class MessengerFragment extends Fragment {
 
                 final String another_user_id = getRef(i).getKey().toString();
 
-                usersReference.child(another_user_id).addValueEventListener(new ValueEventListener() {
+                usersReference.child(another_user_id).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         UserMain userMain = dataSnapshot.child("UserMain").getValue(UserMain.class);

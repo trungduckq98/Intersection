@@ -22,13 +22,14 @@ public class FriendManagerActivity extends AppCompatActivity implements CountFri
     private ViewPager viewPager;
     FriendTabsAccessorAdapter friendTabsAccessorAdapter;
 
-    String currentUserId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_manager);
         init();
-        eventHandler();
+        setUpViewPager();
+        setUpToolbar();
     }
     private void init(){
         toolbar =findViewById(R.id.toolbar_friend_manage);
@@ -43,8 +44,26 @@ public class FriendManagerActivity extends AppCompatActivity implements CountFri
         tabLayout.getTabAt(2).setText("Đã gửi yêu cầu");
 
     }
-
-    private void eventHandler(){
+    private void setUpToolbar(){
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId()== R.id.tb_search){
+                    startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                }
+                return false;
+            }
+        });
+    }
+    private void setUpViewPager(){
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -64,24 +83,9 @@ public class FriendManagerActivity extends AppCompatActivity implements CountFri
             }
         });
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId()== R.id.tb_search){
-                    startActivity(new Intent(getApplicationContext(), SearchActivity.class));
-                }
-                return false;
-            }
-        });
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

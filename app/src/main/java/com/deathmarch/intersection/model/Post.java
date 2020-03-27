@@ -2,18 +2,22 @@ package com.deathmarch.intersection.model;
 
 import com.google.firebase.database.ServerValue;
 
-public class Post {
+import java.io.Serializable;
+
+public class Post implements Serializable {
     private String postUserId;
     private String postId;
     private String postType;
+    private String hasImage;
     private String postImage;
     private String postText;
     private long postTime;
 
-    public Post(String postUserId, String postId, String postType, String postImage, String postText, long postTime) {
+    public Post(String postUserId, String postId, String postType, String hasImage, String postImage, String postText, long postTime) {
         this.postUserId = postUserId;
         this.postId = postId;
         this.postType = postType;
+        this.hasImage = hasImage;
         this.postImage = postImage;
         this.postText = postText;
         this.postTime = postTime;
@@ -44,6 +48,14 @@ public class Post {
 
     public void setPostType(String postType) {
         this.postType = postType;
+    }
+
+    public String getHasImage() {
+        return hasImage;
+    }
+
+    public void setHasImage(String hasImage) {
+        this.hasImage = hasImage;
     }
 
     public String getPostImage() {

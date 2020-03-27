@@ -19,7 +19,7 @@ public class GetTimeAgo {
 
         final long diff = now - time;
         if (diff < MINUTE_MILLIS) {
-            return "vừa mới Online";
+            return "vài giây trước";
         } else if (diff < 2 * MINUTE_MILLIS) {
             return "một phút trước";
         } else if (diff < 50 * MINUTE_MILLIS) {

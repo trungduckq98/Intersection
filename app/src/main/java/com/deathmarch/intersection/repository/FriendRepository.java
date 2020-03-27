@@ -1,5 +1,7 @@
 package com.deathmarch.intersection.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -15,16 +17,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class FriendRepository {
-    private DatabaseReference friendsReference;
+    private DatabaseReference friendsReference = FirebaseDatabase.getInstance().getReference().child("Friends");
     private DatabaseReference usersReference;
-    private String currentUserId = FirebaseAuth.getInstance().getUid();
-
-
-
+    private Query queryFriend;
+    private Query queryReceive;
+    private Query querySend;
     private static FriendRepository instance;
 
-
-    private MutableLiveData<ArrayList<UserMain>> livedataUserFriend = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<UserMain>> livedataUserFriend;
     private ArrayList<UserMain> arrUserFriend = new ArrayList<>();
     private ArrayList<String> arrKeyFriend = new ArrayList<>();
 
@@ -38,38 +38,57 @@ public class FriendRepository {
 
 
     public static FriendRepository getInstance() {
-        // if (instance == null) {
+         if (instance == null) {
         instance = new FriendRepository();
-        // }
+         }
         return instance;
     }
 
-    public MutableLiveData<ArrayList<UserMain>> getLivedataUserFriend(){
+    public MutableLiveData<ArrayList<UserMain>> getLivedataUserFriend(String currentUserId){
+        queryFriend = friendsReference.child(currentUserId).orderByChild("type").equalTo("friend");
+        livedataUserFriend = new MutableLiveData<>();
         loadListKeyFriend();
         return livedataUserFriend;
     }
 
     private void loadListKeyFriend(){
-        friendsReference = FirebaseDatabase.getInstance().getReference().child("Friends").child(currentUserId);
-        Query query = friendsReference.orderByChild("type").equalTo("friend");
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                arrKeyFriend.clear();
-                arrUserFriend.clear();
-                for (DataSnapshot d: dataSnapshot.getChildren()){
-                    String friendId = d.getKey();
-                    arrKeyFriend.add(friendId);
-                }
-                loadListFriend(arrKeyFriend);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        queryFriend.addValueEventListener(valueEventListenerFriend);
     }
+
+    public void deleteListener(){
+        if (queryFriend!=null){
+            queryFriend.removeEventListener(valueEventListenerFriend);
+            queryFriend = null;
+        }
+
+        if (querySend!=null){
+            querySend.removeEventListener(valueEventListenerSend);
+            querySend = null;
+        }
+
+        if (queryReceive!=null){
+            queryReceive.removeEventListener(valueEventListenerReceive);
+            queryReceive=null;
+        }
+    }
+
+    ValueEventListener valueEventListenerFriend = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            arrKeyFriend.clear();
+            arrUserFriend.clear();
+            for (DataSnapshot d: dataSnapshot.getChildren()){
+                String friendId = d.getKey();
+                arrKeyFriend.add(friendId);
+            }
+            loadListFriend(arrKeyFriend);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private void loadListFriend(ArrayList<String> arrKey){
         usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -88,37 +107,37 @@ public class FriendRepository {
             });
 
         }
-
-
     }
 
-    public MutableLiveData<ArrayList<UserMain>> getLivedataUserReceive()
+    public MutableLiveData<ArrayList<UserMain>> getLivedataUserReceive(String currentUserId)
     {
+        queryReceive = friendsReference.child(currentUserId).orderByChild("type").equalTo("received");
+        livedataUserFriend = new MutableLiveData<>();
         loadListKeyReceive();
         return livedataUserReceive;
     }
 
     private void loadListKeyReceive(){
-        friendsReference = FirebaseDatabase.getInstance().getReference().child("Friends").child(currentUserId);
-        Query query = friendsReference.orderByChild("type").equalTo("received");
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                arrKeyReceive.clear();
-                arrUserReceive.clear();
-                for (DataSnapshot d: dataSnapshot.getChildren()){
-                    String friendId = d.getKey();
-                    arrKeyReceive.add(friendId);
-                }
-                loadListReceive(arrKeyReceive);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        queryReceive.addValueEventListener(valueEventListenerReceive);
     }
+
+    ValueEventListener valueEventListenerReceive = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            arrKeyReceive.clear();
+            arrUserReceive.clear();
+            for (DataSnapshot d: dataSnapshot.getChildren()){
+                String friendId = d.getKey();
+                arrKeyReceive.add(friendId);
+            }
+            loadListReceive(arrKeyReceive);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
     private void loadListReceive(ArrayList<String> arrKey){
         usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -139,31 +158,18 @@ public class FriendRepository {
         }
     }
 
-    public MutableLiveData<ArrayList<UserMain>> getLivedataUserSend(){
+
+
+
+    public MutableLiveData<ArrayList<UserMain>> getLivedataUserSend(String currentUserId){
+        querySend = friendsReference.child(currentUserId).orderByChild("type").equalTo("send");
+        livedataUserSend = new MutableLiveData<>();
         loadListKeySend();
         return livedataUserSend;
     }
 
     private void loadListKeySend(){
-        friendsReference = FirebaseDatabase.getInstance().getReference().child("Friends").child(currentUserId);
-        Query query = friendsReference.orderByChild("type").equalTo("send");
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                arrKeySend.clear();
-                arrUserSend.clear();
-                for (DataSnapshot d: dataSnapshot.getChildren()){
-                    String friendId = d.getKey();
-                    arrKeySend.add(friendId);
-                }
-                loadListSend(arrKeySend);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        querySend.addValueEventListener(valueEventListenerSend);
     }
 
     private void loadListSend(ArrayList<String> arrKey){
@@ -184,6 +190,24 @@ public class FriendRepository {
 
         }
     }
+
+    ValueEventListener valueEventListenerSend = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            arrKeySend.clear();
+            arrUserSend.clear();
+            for (DataSnapshot d: dataSnapshot.getChildren()){
+                String friendId = d.getKey();
+                arrKeySend.add(friendId);
+            }
+            loadListSend(arrKeySend);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
 
 

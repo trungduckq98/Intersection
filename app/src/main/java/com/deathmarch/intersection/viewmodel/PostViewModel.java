@@ -1,5 +1,7 @@
 package com.deathmarch.intersection.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -12,10 +14,20 @@ import java.util.ArrayList;
 public class PostViewModel extends ViewModel {
     private LiveData<ArrayList<Post>> liveDataPost;
     private PostRepository postRepository = PostRepository.getInstance();
-    public void init(String userId){
-       liveDataPost = postRepository.getLiveDataPost(userId);
-    }
-    public LiveData<ArrayList<Post>> getLiveDataPost(){
+
+    public LiveData<ArrayList<Post>> getLiveDataPost(String userId){
+        Log.d("bbbbbbbb", "vao view model lay data");
+        if (liveDataPost==null){
+            Log.d("bbbbbbbb", "view model chua co data");
+            liveDataPost = postRepository.getLiveDataPost(userId);
+        }
+        Log.d("bbbbbbbb", "view model da co data");
         return liveDataPost;
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        postRepository.deleteListener();
     }
 }

@@ -29,16 +29,9 @@ import java.util.ArrayList;
 public class SendRequestFragment extends Fragment {
     View view;
     FriendViewModel viewModel;
-    private String currentUserId;
-    DatabaseReference friendsReference;
-    DatabaseReference usersReference;
     RecyclerView recyclerView;
-
     private ArrayList<UserMain> arrayList;
     private SentRequestFriendAdapter adapter;
-
-
-
 
     public SendRequestFragment() {
     }
@@ -53,14 +46,11 @@ public class SendRequestFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_send_request, container, false);
-        init();
-
+        setUpRecyclerView();
         return view;
     }
 
-    private void init(){
-        currentUserId = FirebaseAuth.getInstance().getUid();
-        usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+    private void setUpRecyclerView(){
         recyclerView = view.findViewById(R.id.recycler_sent_request);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -69,16 +59,15 @@ public class SendRequestFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
         arrayList = new ArrayList<>();
 
-        adapter = new SentRequestFriendAdapter(getContext(), arrayList);
+        adapter = new SentRequestFriendAdapter(getContext());
         recyclerView.setAdapter(adapter);
-        viewModel = ViewModelProviders.of(this).get(FriendViewModel.class);
-        viewModel.initSend();
-        viewModel.getLiveDataSend().observe(this, new Observer<ArrayList<UserMain>>() {
+
+        //view model
+        viewModel = ViewModelProviders.of(getActivity()).get(FriendViewModel.class);
+        viewModel.getLiveDataSend(FirebaseAuth.getInstance().getUid()).observe(this, new Observer<ArrayList<UserMain>>() {
             @Override
             public void onChanged(ArrayList<UserMain> userMains) {
                 adapter.updateList(userMains);
-                adapter.notifyDataSetChanged();
-
 
             }
         });

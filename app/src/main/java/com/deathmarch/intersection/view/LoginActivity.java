@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.deathmarch.intersection.CheckNetwork;
 import com.deathmarch.intersection.R;
+import com.deathmarch.intersection.repository.UserRepository;
 import com.deathmarch.intersection.view.homepage.HomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

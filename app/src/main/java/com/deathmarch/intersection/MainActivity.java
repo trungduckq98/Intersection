@@ -80,6 +80,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), MyPageActivity.class));
             }
         });
+        btn7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         btn10.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
                 consoleState();
             }
         });
+
+
+
     }
 
     @Override

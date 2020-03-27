@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_app_round"
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme">
-        <activity android:name=".view.MyPageActivity"></activity>
+        <activity android:name=".view.ViewImageActivity" />
+        <activity android:name=".view.MyPageActivity" />
         <activity android:name=".view.CreatePostActivity" />
         <activity
             android:name=".view.ChatActivity"

@@ -121,8 +121,8 @@ public class ChatActivity extends AppCompatActivity {
 
 
         viewModel = ViewModelProviders.of(this).get(MessengerViewModel.class);
-        viewModel.init(anotherUserId);
-        viewModel.getLiveDataMessenger().observe(this, new Observer<ArrayList<Messenger>>() {
+
+        viewModel.getLiveDataMessenger(anotherUserId).observe(this, new Observer<ArrayList<Messenger>>() {
             @Override
             public void onChanged(ArrayList<Messenger> messengers) {
                 Log.d("trungduc", "size:" +messengers.size());

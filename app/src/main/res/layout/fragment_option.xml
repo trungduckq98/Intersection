@@ -16,6 +16,7 @@
         android:paddingEnd="16dp"
         android:paddingBottom="16dp">
         <androidx.cardview.widget.CardView
+            android:id="@+id/go_my_page_10"
             android:layout_marginTop="16dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
@@ -23,6 +24,7 @@
             android:layout_height="match_parent"
            >
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"

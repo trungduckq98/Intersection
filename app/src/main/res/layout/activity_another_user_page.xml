@@ -206,6 +206,7 @@
                         android:textSize="12sp"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/ln_viewimage3"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:layout_width="0dp"
@@ -301,6 +302,38 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </LinearLayout>
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ln_isfriend3"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <View
+                    android:background="#E1D9DC"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    />
+                <TextView
+                    android:drawablePadding="4dp"
+                    android:gravity="start|center"
+                    android:drawableStart="@drawable/ic_list_black_24dp"
+                    android:padding="8dp"
+                    android:textColor="@color/colorBlack"
+                    android:text="Bài đăng gần đây"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <View
+                    android:background="#E1D9DC"
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+
+
 
         </LinearLayout>
 

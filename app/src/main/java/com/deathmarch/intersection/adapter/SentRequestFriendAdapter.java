@@ -34,11 +34,10 @@ public class SentRequestFriendAdapter extends RecyclerView.Adapter<SentRequestFr
     private String currentUserId;
     private DatabaseReference  friendsReference;
     Context context;
-    ArrayList<UserMain> arrayList;
+    ArrayList<UserMain> arrayList = new ArrayList<>();
 
-    public SentRequestFriendAdapter(Context context, ArrayList<UserMain> arrayList) {
+    public SentRequestFriendAdapter(Context context) {
         this.context = context;
-        this.arrayList = arrayList;
     }
 
     public void updateList(ArrayList<UserMain> newList) {
@@ -47,6 +46,7 @@ public class SentRequestFriendAdapter extends RecyclerView.Adapter<SentRequestFr
         this.arrayList.clear();
         this.arrayList.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
+        notifyDataSetChanged();
     }
 
     @NonNull

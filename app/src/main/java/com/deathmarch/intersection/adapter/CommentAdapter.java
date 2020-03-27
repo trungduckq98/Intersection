@@ -8,12 +8,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.model.Comment;
 import com.deathmarch.intersection.model.GetTimeAgo;
+import com.deathmarch.intersection.model.Post;
 import com.deathmarch.intersection.model.UserMain;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,9 +36,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         this.context = context;
     }
 
-    public void addComment(Comment comment){
-        arrayList.add(comment);
+    public void updateList(ArrayList<Comment> newList) {
+        CommentDiffUtilCallback callback = new CommentDiffUtilCallback(arrayList, newList);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback);
+        this.arrayList.clear();
+        this.arrayList.addAll(newList);
+        diffResult.dispatchUpdatesTo(this);
         notifyDataSetChanged();
+
     }
     @NonNull
     @Override
@@ -49,7 +56,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(@NonNull final CommentViewHolder holder, int position) {
         Comment comment = arrayList.get(position);
-        usersReference.child(comment.getCmtUserId()).child("UserMain").addValueEventListener(new ValueEventListener() {
+        usersReference.child(comment.getCmtUserId()).child("UserMain")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserMain userMain = dataSnapshot.getValue(UserMain.class);

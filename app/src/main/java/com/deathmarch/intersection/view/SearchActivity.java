@@ -3,11 +3,13 @@ package com.deathmarch.intersection.view;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
 
@@ -27,16 +29,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 
 public class SearchActivity extends AppCompatActivity {
     String currentUserId;
-    ArrayList<User> newList;
+   // ArrayList<User> newList = new ArrayList<>();
+    Set set = new HashSet();
     AnotherUserAdapter adapter;
     Toolbar toolbar_search;
     SearchView searchView;
     RecyclerView recyclerView;
-
-    DatabaseReference usersReference;
+    DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +69,12 @@ public class SearchActivity extends AppCompatActivity {
                 if (!newText.equals("")){
                     if (CheckNetwork.check(getApplicationContext())){
                         search(newText);
+                        Log.d("VietNam2020", "Search text = "+ newText);
                     }
 
                 }else {
-                    newList.clear();
-                    adapter.notifyDataSetChanged();
+                    set.clear();
+                    adapter.updateList(set);
                 }
                 return false;
             }
@@ -83,16 +87,13 @@ public class SearchActivity extends AppCompatActivity {
         toolbar_search = findViewById(R.id.toolbar_search);
         searchView = findViewById(R.id.search_main);
         searchView.onActionViewExpanded();
-
-
         recyclerView = findViewById(R.id.recycler_another_user);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        newList =new ArrayList<>();
-        adapter = new AnotherUserAdapter(getApplicationContext(), newList);
+        adapter = new AnotherUserAdapter(getApplicationContext());
         recyclerView.setAdapter(adapter);
 
 
@@ -102,55 +103,33 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void search(String text){
-        final ArrayList<User> arrayList = new ArrayList<>();
-        newList.clear();
-        usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        set.clear();
         Query queryDisplayName = usersReference.orderByChild("UserMain/userDisplayName").startAt(text).endAt(text+"\uf8ff");
-        final Query queryFullName = usersReference.orderByChild("UserInfo/userFullName").startAt(text).endAt(text+"\uf8ff");
-        queryDisplayName.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot d :dataSnapshot.getChildren())
-                {
-                    UserMain userMain = d.child("UserMain").getValue(UserMain.class);
-                    UserInfo userInfo = d.child("UserInfo").getValue(UserInfo.class);
-                    User user = new User(userMain, userInfo);
-                    if (!userMain.getUserId().equals(currentUserId)){
-                        arrayList.add(user);
-                    }
-
-                }
-                queryFullName.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot d :dataSnapshot.getChildren())
-                        {
-                            UserMain userMain = d.child("UserMain").getValue(UserMain.class);
-                            UserInfo userInfo = d.child("UserInfo").getValue(UserInfo.class);
-                            User user = new User(userMain, userInfo);
-                            if (!userMain.getUserId().equals(currentUserId)){
-                                arrayList.add(user);
-                            }
-                        }
-                        newList.addAll(new HashSet<>(arrayList));
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-
+        Query queryFullName = usersReference.orderByChild("UserInfo/userFullName").startAt(text).endAt(text+"\uf8ff");
+        queryDisplayName.addListenerForSingleValueEvent(valueEventListener);
+        queryFullName.addListenerForSingleValueEvent(valueEventListener);
     }
+
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            Log.d("VietNam2020", "datasnap = "+dataSnapshot.toString());
+            for (DataSnapshot d :dataSnapshot.getChildren()) {
+                UserMain userMain = d.child("UserMain").getValue(UserMain.class);
+                UserInfo userInfo = d.child("UserInfo").getValue(UserInfo.class);
+                User user = new User(userMain, userInfo);
+                if (!userMain.getUserId().equals(currentUserId)){
+                    set.add(user);
+                }
+            }
+            adapter.updateList(set);
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
 
 }

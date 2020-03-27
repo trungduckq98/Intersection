@@ -115,7 +115,7 @@ public class SearchByEmailDialogFragment extends DialogFragment {
         usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
         Query queryDisplayName = usersReference.orderByChild("UserMain/userEmail").equalTo(text);
 
-        queryDisplayName.addValueEventListener(new ValueEventListener() {
+        queryDisplayName.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserMain userMain = new UserMain();

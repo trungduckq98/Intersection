@@ -40,9 +40,6 @@ public class ReceiveRequestFragment extends Fragment implements AcceptRequestFri
     Snackbar snackbar;
     FriendViewModel viewModel;
     RecyclerView recyclerView;
-
-
-    private ArrayList<UserMain> arrayList;
     private ReceiveRequestAdapter adapter;
     private AcceptRequestFriend acceptRequestFriend =this;
 
@@ -59,13 +56,13 @@ public class ReceiveRequestFragment extends Fragment implements AcceptRequestFri
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_receive_request, container, false);
-        init();
+        setUpRecyclerView();
 
 
         return view;
     }
 
-    private void init(){
+    private void setUpRecyclerView(){
         linearLayout = view.findViewById(R.id.linearlayout_fragment_receiver);
         recyclerView = view.findViewById(R.id.recycler_receive_request);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -73,44 +70,37 @@ public class ReceiveRequestFragment extends Fragment implements AcceptRequestFri
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
-        arrayList = new ArrayList<>();
-        adapter = new ReceiveRequestAdapter(getContext(), arrayList,acceptRequestFriend );
+        adapter = new ReceiveRequestAdapter(getContext(), acceptRequestFriend);
         recyclerView.setAdapter(adapter);
-        viewModel = ViewModelProviders.of(this).get(FriendViewModel.class);
-        viewModel.initReceive();
-        viewModel.getLiveDataReceive().observe(this, new Observer<ArrayList<UserMain>>() {
+
+        //view model
+
+        viewModel = ViewModelProviders.of(getActivity()).get(FriendViewModel.class);
+        viewModel.getLiveDataReceive(FirebaseAuth.getInstance().getUid()).observe(this, new Observer<ArrayList<UserMain>>() {
             @Override
             public void onChanged(ArrayList<UserMain> userMains) {
-                Log.d("trungduc","size:"+ userMains.size());
                 adapter.updateList(userMains);
-                adapter.notifyDataSetChanged();
-
             }
         });
 
 
     }
 
-    public void showSnackbar(final String userId, String displayname)
-    {
-        // Create snackbar
+    public void showSnackbar(final String userId, String displayname) {
         String message = "Bạn và "+ displayname+" đã trở thành bạn bè.";
          snackbar = Snackbar.make(linearLayout, message, Snackbar.LENGTH_LONG);
-
-        // Set an action on it, and a handler
-        snackbar.setAction("ViewPage", new View.OnClickListener() {
+         snackbar.setAction("ViewPage", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goAnotherUserPageActivity(userId);
             }
         });
-
-        snackbar.show();
+         snackbar.show();
     }
 
     @Override
     public void isComplete(String userId, String displayname) {
-                    showSnackbar(userId, displayname);
+        showSnackbar(userId, displayname);
     }
 
     private void goAnotherUserPageActivity(String anotherUserId)
