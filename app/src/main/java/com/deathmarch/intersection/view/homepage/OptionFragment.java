@@ -22,20 +22,19 @@ import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.model.User;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.view.MyPageActivity;
+import com.deathmarch.intersection.view.ViewImageActivity;
 import com.deathmarch.intersection.view.friend.FriendManagerActivity;
 import com.deathmarch.intersection.viewmodel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class OptionFragment extends Fragment {
     private View view;
     private CardView cardView_Friend;
     private CardView cardView_Logout;
     private CardView cardView_Go_mypage;
+    private CardView cardView_Image;
 
     private ImageView img_Thump;
     private TextView txt_Displayname;
@@ -61,6 +60,7 @@ public class OptionFragment extends Fragment {
         cardView_Friend = view.findViewById(R.id.cardview_friend);
         cardView_Logout = view.findViewById(R.id.cardview_logout);
         cardView_Go_mypage= view.findViewById(R.id.go_my_page_10);
+        cardView_Image = view.findViewById(R.id.cardview_image);
         img_Thump = view.findViewById(R.id.img_thump10);
         txt_Displayname = view.findViewById(R.id.txt_displayname10);
         currentUserId = FirebaseAuth.getInstance().getUid();
@@ -89,6 +89,16 @@ public class OptionFragment extends Fragment {
                 firebaseAuth.signOut();
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+
+        cardView_Image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ViewImageActivity.class);
+                intent.putExtra("userId", FirebaseAuth.getInstance().getUid());
+                intent.putExtra("userDisplayname", txt_Displayname.getText().toString());
                 startActivity(intent);
             }
         });

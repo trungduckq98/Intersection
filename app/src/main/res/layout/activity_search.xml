@@ -16,6 +16,7 @@
         <SearchView
             android:background="@drawable/search_input_style_b"
             app:theme="@style/AppSearchView"
+            android:queryBackground="@android:color/transparent"
             android:id="@+id/search_main"
             android:layout_gravity="end"
             android:layout_width="wrap_content"

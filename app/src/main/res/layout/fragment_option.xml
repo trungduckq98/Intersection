@@ -107,6 +107,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardview_image"
             android:layout_marginStart="8dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"

@@ -5,9 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.deathmarch.intersection.model.Messenger;
-import com.deathmarch.intersection.model.UserMain;
-import com.firebase.ui.database.FirebaseArray;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +23,6 @@ public class MessengerRepository {
     private String mLastKey = "";
     private String mPrevKey = "";
 
-    private String currentUserId = FirebaseAuth.getInstance().getUid();
     private DatabaseReference messengerReference =FirebaseDatabase.getInstance().getReference().child("Messenger");
     Query query;
 
@@ -40,7 +36,7 @@ public class MessengerRepository {
         return instance;
     }
 
-    public MutableLiveData<ArrayList<Messenger>> getLivedataMessenger(String anotherUserId){
+    public MutableLiveData<ArrayList<Messenger>> getLivedataMessenger(String currentUserId, String anotherUserId){
         livedataMessenger = new MutableLiveData<>();
         query = messengerReference.child(currentUserId).child(anotherUserId);
         getArrMessenger();

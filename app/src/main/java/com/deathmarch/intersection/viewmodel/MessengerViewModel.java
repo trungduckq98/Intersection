@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.deathmarch.intersection.model.Messenger;
-import com.deathmarch.intersection.model.UserMain;
-import com.deathmarch.intersection.repository.FriendRepository;
 import com.deathmarch.intersection.repository.MessengerRepository;
 
 import java.util.ArrayList;
@@ -15,9 +13,9 @@ public class MessengerViewModel extends ViewModel {
     private MessengerRepository messengerRepository = MessengerRepository.getInstance();
 
 
-    public LiveData<ArrayList<Messenger>> getLiveDataMessenger(String anotherUserId){
+    public LiveData<ArrayList<Messenger>> getLiveDataMessenger(String currenrUserId, String anotherUserId){
         if (liveDataMessenger==null){
-            liveDataMessenger = messengerRepository.getLivedataMessenger(anotherUserId);
+            liveDataMessenger = messengerRepository.getLivedataMessenger(currenrUserId, anotherUserId);
         }
         return liveDataMessenger;
     }

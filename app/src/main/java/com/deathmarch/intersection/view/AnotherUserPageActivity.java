@@ -1,5 +1,16 @@
 package com.deathmarch.intersection.view;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,17 +21,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.deathmarch.intersection.CheckNetwork;
@@ -37,10 +37,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -159,7 +157,6 @@ public class AnotherUserPageActivity extends AppCompatActivity {
         currentUserViewModel.getLiveDataUser(anotherUserId).observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
-                Log.d("haiduong2020", "activity co data");
                 UserMain userMain = user.getUserMain();
                 UserInfo userInfo = user.getUserInfo();
                 Glide.with(getApplicationContext())
@@ -168,6 +165,7 @@ public class AnotherUserPageActivity extends AppCompatActivity {
                         .error(R.drawable.image_user_defalse)
                         .into(img_Thump);
                 txt_Displayname.setText(userMain.getUserDisplayName());
+                toolbar.setTitle(userMain.getUserDisplayName());
                 txt_Email.setText("Email: "+userMain.getUserEmail());
                 if (userInfo!=null){
                     txt_Fullname.setText("Họ tên: "+userInfo.getUserFullName());
@@ -240,6 +238,7 @@ public class AnotherUserPageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ViewImageActivity.class);
                 intent.putExtra("userId", anotherUserId);
+                intent.putExtra("userDisplayname", txt_Displayname.getText().toString());
                 startActivity(intent);
             }
         });
@@ -296,6 +295,16 @@ public class AnotherUserPageActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 intent.putExtra("another_user_id", anotherUserId );
                 startActivity(intent);
+            }
+        });
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId()== R.id.tb_search){
+                    startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                }
+                return false;
             }
         });
     }
@@ -390,6 +399,12 @@ public class AnotherUserPageActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
 }

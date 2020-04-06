@@ -2,7 +2,6 @@ package com.deathmarch.intersection.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DiffUtil;
@@ -145,17 +143,22 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     .error(R.drawable.image_user_defalse)
                     .into(holder.img_PostImage);
         }
-
-        postReference.child(post.getPostUserId()).child(post.getPostId()).addValueEventListener(new ValueEventListener() {
+        ValueEventListener likeValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild("postLike")){
-                   long countLike = dataSnapshot.child("postLike").getChildrenCount();
+                    long countLike = dataSnapshot.child("postLike").getChildrenCount();
                     holder.txt_CountLike.setText(""+countLike);
                 }else {
                     holder.txt_CountLike.setText(""+0);
                 }
 
+                if (dataSnapshot.hasChild("postComment")){
+                    long countCmt = dataSnapshot.child("postComment").getChildrenCount();
+                    holder.txt_Comment.setText(countCmt+" - Comment");
+                }else {
+                    holder.txt_Comment.setText("Comment");
+                }
 
 
                 if (dataSnapshot.hasChild("postLike/"+currentUserId)){
@@ -167,12 +170,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 }
             }
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        };
+        postReference.child(post.getPostUserId()).child(post.getPostId()).addValueEventListener(likeValueEventListener);
+
+
+
 
         holder.img_Like.setOnClickListener(new View.OnClickListener() {
             @Override

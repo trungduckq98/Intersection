@@ -1,22 +1,28 @@
 package com.deathmarch.intersection.view.homepage;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
 import com.deathmarch.intersection.R;
+import com.deathmarch.intersection.model.Messenger;
 import com.deathmarch.intersection.view.SearchActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -98,6 +104,20 @@ public class HomeActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         updateUserStatus("online");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        updateUserStatus("offline");
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 
     @Override
@@ -105,6 +125,39 @@ public class HomeActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_search, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+    private void listenerMess(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("LastMess").child(currentUserId);
+        Query query = databaseReference.orderByChild("time").limitToLast(1);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue()!=null){;
+                    for (DataSnapshot d :dataSnapshot.getChildren()) {
+                        Messenger messenger = d.getValue(Messenger.class);
+                        if (!messenger.getFrom().equals(currentUserId)){
+                            if (!messenger.getSeen().equals("true")){
+                                String contentShow;
+                                if (messenger.getType().equals("text")){
+                                    contentShow= messenger.getContent();
+                                }else {
+                                    contentShow= "Đã gửi một ảnh";
+                                }
+                                // show Notification
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
 
 

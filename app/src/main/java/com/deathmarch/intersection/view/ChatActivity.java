@@ -122,7 +122,7 @@ public class ChatActivity extends AppCompatActivity {
 
         viewModel = ViewModelProviders.of(this).get(MessengerViewModel.class);
 
-        viewModel.getLiveDataMessenger(anotherUserId).observe(this, new Observer<ArrayList<Messenger>>() {
+        viewModel.getLiveDataMessenger(FirebaseAuth.getInstance().getUid(), anotherUserId).observe(this, new Observer<ArrayList<Messenger>>() {
             @Override
             public void onChanged(ArrayList<Messenger> messengers) {
                 Log.d("trungduc", "size:" +messengers.size());

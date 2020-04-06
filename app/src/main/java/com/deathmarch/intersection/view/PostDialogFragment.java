@@ -1,6 +1,5 @@
 package com.deathmarch.intersection.view;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,11 +15,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +36,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -244,31 +240,9 @@ public class PostDialogFragment extends DialogFragment {
                     .into(img_PostImage);
         }
 
-        postReference.child(post.getPostUserId()).child(post.getPostId()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild("postLike")) {
-                    long countLike = dataSnapshot.child("postLike").getChildrenCount();
-                    txt_CountLike.setText("" + countLike);
-                } else {
-                    txt_CountLike.setText("" + 0);
-                }
-
-                if (dataSnapshot.hasChild("postLike/" + currentUserId)) {
-                    img_Like.setImageResource(R.drawable.ic_heart_pink);
-                    isLike = true;
-                } else {
-                    img_Like.setImageResource(R.drawable.ic_heart_white);
-                    isLike = false;
-                }
-            }
 
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        postReference.child(post.getPostUserId()).child(post.getPostId()).addValueEventListener(valueEventListener);
 
         img_Like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -292,15 +266,46 @@ public class PostDialogFragment extends DialogFragment {
 
     }
 
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if (dataSnapshot.hasChild("postLike")) {
+                long countLike = dataSnapshot.child("postLike").getChildrenCount();
+                txt_CountLike.setText("" + countLike);
+            } else {
+                txt_CountLike.setText("" + 0);
+            }
+
+            if (dataSnapshot.hasChild("postLike/" + currentUserId)) {
+                img_Like.setImageResource(R.drawable.ic_heart_pink);
+                isLike = true;
+            } else {
+                img_Like.setImageResource(R.drawable.ic_heart_white);
+                isLike = false;
+            }
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
     private void getArrComment(String postUserId, String postId){
         CommentViewModel commentViewModel = ViewModelProviders.of(this).get(CommentViewModel.class);
         commentViewModel.getLiveDataComment(postUserId, postId).observe(this, new Observer<ArrayList<Comment>>() {
             @Override
             public void onChanged(ArrayList<Comment> comments) {
-                Log.d("vvvvvvvvvvv", " size: "+comments.size());
                 adapter.updateList(comments);
             }
         });
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        postReference.child(post.getPostUserId()).child(post.getPostId()).removeEventListener(valueEventListener);
 
     }
 

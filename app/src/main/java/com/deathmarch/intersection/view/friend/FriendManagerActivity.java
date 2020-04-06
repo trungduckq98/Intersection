@@ -1,15 +1,14 @@
 package com.deathmarch.intersection.view.friend;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.adapter.CountFriend;
@@ -72,7 +71,18 @@ public class FriendManagerActivity extends AppCompatActivity implements CountFri
 
             @Override
             public void onPageSelected(int position) {
+                switch (position){
+                    case 0:
+                        toolbar.setTitle("Bạn bè");
+                        break;
+                    case 1:
+                        toolbar.setTitle("Lời mời kết bạn");
+                        break;
+                    case 2:
+                        toolbar.setTitle("Đã gửi yêu cầu");
+                        break;
 
+                }
 
 
             }

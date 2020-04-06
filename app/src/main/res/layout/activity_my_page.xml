@@ -8,6 +8,7 @@
     tools:context=".view.MyPageActivity">
 
     <androidx.appcompat.widget.Toolbar
+        app:title="Trang của bạn"
         android:id="@+id/toolbar_my_page"
         android:layout_width="match_parent"
         android:layout_height="50dp"

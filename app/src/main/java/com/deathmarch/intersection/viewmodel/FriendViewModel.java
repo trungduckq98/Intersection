@@ -18,9 +18,12 @@ public class FriendViewModel extends ViewModel {
     private FriendRepository friendRepository = FriendRepository.getInstance();
 
     public LiveData<ArrayList<UserMain>> getLiveDataFriend(String currentUserId){
+        Log.d("kienquoc", "FRIEND: vao viewmodel laydata ");
         if (liveDataFriend==null){
+            Log.d("kienquoc", "FRIEND: viewmodel chua co data ");
             liveDataFriend = friendRepository.getLivedataUserFriend(currentUserId);
         }
+        Log.d("kienquoc", "FRIEND: viewmodel co data ");
         return liveDataFriend;
     }
 

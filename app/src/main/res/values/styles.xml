@@ -31,4 +31,17 @@
         <item name="android:windowExitAnimation">@anim/dialog_out_animation</item>
     </style>
 
+    <style name="ImageDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/zoom_out_animation</item>
+        <item name="android:windowExitAnimation">@anim/zoom_in_animation</item>
+    </style>
+
+
+    <style name="ThemeImageDialogFragment">
+
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimaryDark">#504E4E</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 </resources>

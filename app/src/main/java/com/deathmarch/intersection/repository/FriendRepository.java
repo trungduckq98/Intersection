@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.deathmarch.intersection.model.UserMain;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,7 +23,7 @@ public class FriendRepository {
     private Query querySend;
     private static FriendRepository instance;
 
-    private MutableLiveData<ArrayList<UserMain>> livedataUserFriend;
+    private MutableLiveData<ArrayList<UserMain>> livedataUserFriend = new MutableLiveData<>();
     private ArrayList<UserMain> arrUserFriend = new ArrayList<>();
     private ArrayList<String> arrKeyFriend = new ArrayList<>();
 
@@ -97,6 +96,7 @@ public class FriendRepository {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     arrUserFriend.add(dataSnapshot.getValue(UserMain.class));
+                    Log.d("kienquoc", "FRIEND:  "+dataSnapshot.toString());
                     livedataUserFriend.setValue(arrUserFriend);
                 }
 
@@ -112,7 +112,7 @@ public class FriendRepository {
     public MutableLiveData<ArrayList<UserMain>> getLivedataUserReceive(String currentUserId)
     {
         queryReceive = friendsReference.child(currentUserId).orderByChild("type").equalTo("received");
-        livedataUserFriend = new MutableLiveData<>();
+        livedataUserReceive = new MutableLiveData<>();
         loadListKeyReceive();
         return livedataUserReceive;
     }

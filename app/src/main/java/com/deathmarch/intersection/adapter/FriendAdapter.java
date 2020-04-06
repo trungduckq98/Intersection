@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.deathmarch.intersection.CheckNetwork;
 import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.model.GetTimeAgo;
-import com.deathmarch.intersection.model.UserInfo;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.model.UserState;
 import com.deathmarch.intersection.view.AnotherUserPageActivity;
@@ -29,12 +30,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {
+public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> implements Filterable {
     private DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
     private ArrayList<UserMain> arrayList = new ArrayList<>();
+    private ArrayList<UserMain> arrAll = new ArrayList<>();
+
     private Context context;
 
     public FriendAdapter(Context context) {
@@ -44,8 +48,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     public void updateList(ArrayList<UserMain> newList) {
         FriendDiffUtilCallback callback = new FriendDiffUtilCallback(arrayList, newList);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback);
+        this.arrAll.clear();
+        this.arrAll.addAll(newList);
         this.arrayList.clear();
-        this.arrayList.addAll(newList);
+        this.arrayList.addAll(arrAll);
+
         diffResult.dispatchUpdatesTo(this);
         notifyDataSetChanged();
     }
@@ -84,7 +91,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             }
         });
 
-        usersReference.child(userMain.getUserId()).child("UserState").addValueEventListener(new ValueEventListener() {
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserState userState = dataSnapshot.getValue(UserState.class);
@@ -103,7 +110,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        };
+
+        usersReference.child(userMain.getUserId()).child("UserState").addValueEventListener(valueEventListener);
+
+
+
 
 
 
@@ -113,6 +125,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     public int getItemCount() {
         return arrayList.size();
     }
+
+
 
     public class FriendViewHolder extends RecyclerView.ViewHolder {
         CircleImageView img_Thump;
@@ -136,5 +150,38 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
+    @Override
+    public Filter getFilter() {
+        return friendFilter;
+    }
+
+    private Filter friendFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<UserMain> arrFilter = new ArrayList<>();
+            if (constraint.toString().isEmpty()){
+                arrFilter.addAll(arrAll);
+            }else {
+                for (UserMain userMain : arrAll){
+                    if (userMain.getUserDisplayName().toLowerCase().contains(constraint.toString().toLowerCase())){
+                        arrFilter.add(userMain);
+                    }
+                }
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = arrFilter;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            arrayList.clear();
+            arrayList.addAll((Collection<? extends UserMain>) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+
 }
 

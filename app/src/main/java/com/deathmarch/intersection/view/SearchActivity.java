@@ -1,17 +1,16 @@
 package com.deathmarch.intersection.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.deathmarch.intersection.CheckNetwork;
 import com.deathmarch.intersection.R;
@@ -27,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -69,7 +67,6 @@ public class SearchActivity extends AppCompatActivity {
                 if (!newText.equals("")){
                     if (CheckNetwork.check(getApplicationContext())){
                         search(newText);
-                        Log.d("VietNam2020", "Search text = "+ newText);
                     }
 
                 }else {
@@ -95,10 +92,6 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
         adapter = new AnotherUserAdapter(getApplicationContext());
         recyclerView.setAdapter(adapter);
-
-
-
-
 
     }
 

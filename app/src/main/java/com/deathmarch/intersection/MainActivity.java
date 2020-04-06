@@ -1,14 +1,17 @@
 package com.deathmarch.intersection;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import com.deathmarch.intersection.view.CreatePostActivity;
 import com.deathmarch.intersection.view.LauncherActivity;
@@ -87,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btn8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast(getApplicationContext(), "Trung Đức", "Đã gửi một hình ảnh");
+            }
+        });
+
         btn10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +107,26 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
+    }
+
+    public void showToast(Context context, String displayname, String content){
+
+       final Toast toast = new Toast(context);
+        toast.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        View view = getLayoutInflater().inflate(R.layout.messenger_custom_toast, null);
+        TextView txt_Displayname = view.findViewById(R.id.txt_displayname22);
+        txt_Displayname.setText(displayname);
+        TextView txt_Content = view.findViewById(R.id.txt_content22);
+        txt_Content.setText(content);
+        toast.setView(view);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.show();
+            }
+        }, 500);
 
     }
 
