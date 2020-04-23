@@ -1,5 +1,6 @@
 package com.deathmarch.intersection.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -54,8 +55,9 @@ public class PostDialogFragment extends DialogFragment {
     Post post;
     ImageView btn_ClosePost;
     String currentUserId;
-    DatabaseReference usersReference ;
-    DatabaseReference postReference ;
+    DatabaseReference usersReference;
+    DatabaseReference postReference;
+    DatabaseReference notifyReference;
 
     boolean isLike;
     CircleImageView img_Thump;
@@ -74,10 +76,9 @@ public class PostDialogFragment extends DialogFragment {
     CommentAdapter adapter;
     ImageView img_option;
 
-    public static PostDialogFragment newInstane(){
+    public static PostDialogFragment newInstane() {
         return new PostDialogFragment();
     }
-
 
 
     @Override
@@ -109,9 +110,10 @@ public class PostDialogFragment extends DialogFragment {
         return view;
     }
 
-    private void init(){
+    private void init() {
+        notifyReference = FirebaseDatabase.getInstance().getReference().child("Notify");
         currentUserId = FirebaseAuth.getInstance().getUid();
-       usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
         postReference = FirebaseDatabase.getInstance().getReference().child("Post");
 
         btn_ClosePost = view.findViewById(R.id.img_close_dialog_post14);
@@ -128,7 +130,7 @@ public class PostDialogFragment extends DialogFragment {
         btn_Sent_Cmt = view.findViewById(R.id.btn_sent_comment14);
         img_option = view.findViewById(R.id.img_option14);
 
-        recyclerView=view.findViewById(R.id.recycler_comment14);
+        recyclerView = view.findViewById(R.id.recycler_comment14);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new CommentAdapter(getActivity());
@@ -136,7 +138,7 @@ public class PostDialogFragment extends DialogFragment {
 
     }
 
-    private void loadUserCreatePost(){
+    private void loadUserCreatePost() {
         UserViewModel viewModel = ViewModelProviders.of(this).get(UserViewModel.class);
         viewModel.getLiveDataUser(post.getPostUserId()).observe(this, new Observer<User>() {
             @Override
@@ -155,14 +157,14 @@ public class PostDialogFragment extends DialogFragment {
 
     }
 
-    private void eventHandler(){
+    private void eventHandler() {
         btn_Sent_Cmt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String contentCmt = edt_Cmt_Content.getText().toString().trim();
-                if (!TextUtils.isEmpty(contentCmt)){
+                if (!TextUtils.isEmpty(contentCmt)) {
                     if (CheckNetwork.check(getContext())) createComment(contentCmt);
-                }else {
+                } else {
                     Toast.makeText(getContext(), "Hãy nhập bình luận", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -174,35 +176,76 @@ public class PostDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
-    }
-    private void createComment(String cmtContent){
-            currentPostReference = FirebaseDatabase.getInstance().getReference().child("Post")
-                    .child(post.getPostUserId()).child(post.getPostId());
-            DatabaseReference cmt_push = currentPostReference.child("postComment").push();
-            String cmtId = cmt_push.getKey();
 
-            Map cmtMap = new HashMap();
-            cmtMap.put("cmtId", cmtId);
-            cmtMap.put("cmtUserId", currentUserId);
-            cmtMap.put("cmtPostId", post.getPostId());
-            cmtMap.put("cmtContent", cmtContent);
-            cmtMap.put("cmtTime", ServerValue.TIMESTAMP);
-            currentPostReference.child("postComment").child(cmtId).updateChildren(cmtMap).addOnCompleteListener(new OnCompleteListener() {
-                @Override
-                public void onComplete(@NonNull Task task) {
-                    if (task.isSuccessful()){
-                        edt_Cmt_Content.setText("");
-                        Toast.makeText(getContext(), "Đã bình luận", Toast.LENGTH_SHORT).show();
+        img_Thump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goAnotherUserPage();
+            }
+        });
+        txt_Displayname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goAnotherUserPage();
+            }
+        });
+    }
+
+    private void goAnotherUserPage(){
+        if (!post.getPostUserId().equals(currentUserId)){
+            Intent intent = new Intent(getActivity(), AnotherUserPageActivity.class);
+            intent.putExtra("anotherUserId", post.getPostUserId());
+            startActivity(intent);
+            dismiss();
+        }
+    }
+
+    private void createComment(String cmtContent) {
+        currentPostReference = FirebaseDatabase.getInstance().getReference().child("Post")
+                .child(post.getPostUserId()).child(post.getPostId());
+        DatabaseReference cmt_push = currentPostReference.child("postComment").push();
+        String cmtId = cmt_push.getKey();
+
+        Map cmtMap = new HashMap();
+        cmtMap.put("cmtId", cmtId);
+        cmtMap.put("cmtUserId", currentUserId);
+        cmtMap.put("cmtPostId", post.getPostId());
+        cmtMap.put("cmtContent", cmtContent);
+        cmtMap.put("cmtTime", ServerValue.TIMESTAMP);
+        currentPostReference.child("postComment").child(cmtId).updateChildren(cmtMap).addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.isSuccessful()) {
+                    edt_Cmt_Content.setText("");
+
+                    if (!post.getPostUserId().equals(currentUserId)) {
+                        Map notifyLikeMap = new HashMap();
+                        notifyLikeMap.put("time", ServerValue.TIMESTAMP);
+                        notifyLikeMap.put("userId", currentUserId);
+                        notifyLikeMap.put("seen", "false");
+                        notifyReference.child(post.getPostUserId()).child(post.getPostId())
+                                .child("cmtNotify").updateChildren(notifyLikeMap);
+
                     }
+
                 }
-            });
+            }
+        });
 
     }
 
     private void eventPost() {
 
-        if (post.getPostUserId().equals(currentUserId)){
+        if (post.getPostUserId().equals(currentUserId)) {
             img_option.setVisibility(View.VISIBLE);
+
+            notifyReference.child(post.getPostUserId()).child(post.getPostId())
+                    .child("cmtNotify").child("seen").setValue("true");
+            notifyReference.child(post.getPostUserId()).child(post.getPostId())
+                    .child("likeNotify").child("seen").setValue("true");
+
+
+
         }
 
         img_option.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +284,6 @@ public class PostDialogFragment extends DialogFragment {
         }
 
 
-
         postReference.child(post.getPostUserId()).child(post.getPostId()).addValueEventListener(valueEventListener);
 
         img_Like.setOnClickListener(new View.OnClickListener() {
@@ -253,15 +295,28 @@ public class PostDialogFragment extends DialogFragment {
                 } else {
                     Map likeMap = new HashMap();
                     likeMap.put("likeTime", ServerValue.TIMESTAMP);
-                    postReference.child(post.getPostUserId()).child(post.getPostId()
-                    )
-                            .child("postLike").child(currentUserId).updateChildren(likeMap);
+                    postReference.child(post.getPostUserId()).child(post.getPostId()).child("postLike")
+                            .child(currentUserId).updateChildren(likeMap).addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if (task.isSuccessful()) {
+                                if (!post.getPostUserId().equals(currentUserId)) {
+                                    Map notifyLikeMap = new HashMap();
+                                    notifyLikeMap.put("time", ServerValue.TIMESTAMP);
+                                    notifyLikeMap.put("userId", currentUserId);
+                                    notifyLikeMap.put("seen", "false");
+                                    notifyReference.child(post.getPostUserId()).child(post.getPostId())
+                                           .child("likeNotify").updateChildren(notifyLikeMap);
+
+                                }
+                            }
+                        }
+                    });
                 }
             }
         });
 
         //event handler comment
-
 
 
     }
@@ -291,7 +346,7 @@ public class PostDialogFragment extends DialogFragment {
         }
     };
 
-    private void getArrComment(String postUserId, String postId){
+    private void getArrComment(String postUserId, String postId) {
         CommentViewModel commentViewModel = ViewModelProviders.of(this).get(CommentViewModel.class);
         commentViewModel.getLiveDataComment(postUserId, postId).observe(this, new Observer<ArrayList<Comment>>() {
             @Override
@@ -309,7 +364,7 @@ public class PostDialogFragment extends DialogFragment {
 
     }
 
-    private void showBottomSheetDialog(){
+    private void showBottomSheetDialog() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
         bottomSheetDialog.setContentView(R.layout.post_option_bottom_sheet_dialog);
         LinearLayout delete_post = bottomSheetDialog.findViewById(R.id.delete_post);

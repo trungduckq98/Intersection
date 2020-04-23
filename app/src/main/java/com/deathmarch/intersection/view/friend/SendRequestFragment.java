@@ -16,13 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.deathmarch.intersection.R;
-import com.deathmarch.intersection.adapter.CountFriend;
 import com.deathmarch.intersection.adapter.SentRequestFriendAdapter;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.viewmodel.FriendViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -64,7 +61,7 @@ public class SendRequestFragment extends Fragment {
 
         //view model
         viewModel = ViewModelProviders.of(getActivity()).get(FriendViewModel.class);
-        viewModel.getLiveDataSend(FirebaseAuth.getInstance().getUid()).observe(this, new Observer<ArrayList<UserMain>>() {
+        viewModel.getLiveDataSend(FirebaseAuth.getInstance().getUid()).observe(getActivity(), new Observer<ArrayList<UserMain>>() {
             @Override
             public void onChanged(ArrayList<UserMain> userMains) {
                 adapter.updateList(userMains);

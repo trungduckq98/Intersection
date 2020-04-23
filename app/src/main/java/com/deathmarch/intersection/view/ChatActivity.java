@@ -1,26 +1,22 @@
 package com.deathmarch.intersection.view;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.deathmarch.intersection.CheckNetwork;
@@ -28,14 +24,11 @@ import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.adapter.MessengerAdapter;
 import com.deathmarch.intersection.model.GetTimeAgo;
 import com.deathmarch.intersection.model.Messenger;
-import com.deathmarch.intersection.model.User;
-import com.deathmarch.intersection.model.UserInfo;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.model.UserState;
 import com.deathmarch.intersection.viewmodel.MessengerViewModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -58,40 +51,45 @@ import java.util.Random;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
-    String currentUserId;
+    private String currentUserId;
+    private String anotherUserId;
+
+    private String anotherUserInChat;
+
     private DatabaseReference usersReference;
     private DatabaseReference databaseReference;
     private DatabaseReference messengerReference;
-    private String anotherUserId;
-    private CircleImageView img_Thump;
-    private TextView txt_DisplayName;
-    private ImageView img_State;
-    private TextView txt_State;
-    private TextView txt_Daxem;
-    private RecyclerView recyclerView;
-    private MessengerAdapter adapter;
-    private ArrayList<Messenger> arrayList;
-    private String urlImageAnother;
+    private DatabaseReference stateCurrentUserReference;
+
 
     Toolbar toolbar;
     ImageView img_ExitChat;
     ImageView img_sent_mess;
     ImageView img_sent_img;
     EditText edt_Content_Mess;
+    private CircleImageView img_Thump;
+    private TextView txt_DisplayName;
+    private ImageView img_State;
+    private TextView txt_State;
+    private TextView txt_Daxem;
+    private RecyclerView recyclerView;
 
-
-
+    private MessengerAdapter adapter;
+    private String urlImageAnother;
     private MessengerViewModel viewModel;
 
-    String anotherUserInChat;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         init();
-        checkSeen();
-
-
+        getInfoAnotherUser();  // get displayname va image cua doi phuong
+        getAnotherInChat();     // check xem doi phuong co dang trong man hinh activityChat khong
+        checkSeenMesenger();   // kiem tra doi phuong da xem tin nhan cua minh chua
+        setUpRecyclerView();
+        evenHandler();
 
     }
 
@@ -99,56 +97,74 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         anotherUserId = intent.getStringExtra("another_user_id");
         currentUserId = FirebaseAuth.getInstance().getUid();
-
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        messengerReference = FirebaseDatabase.getInstance().getReference().child("Messenger");
+        stateCurrentUserReference = databaseReference.child("Users").child(currentUserId).child("UserState");
+        messengerReference = databaseReference.child("Messenger");
         img_Thump = findViewById(R.id.img_thump_chat_activity);
         txt_DisplayName = findViewById(R.id.txt_name_friend_chat_activity);
         txt_State = findViewById(R.id.txt_friend_state_chat_activity);
         img_State = findViewById(R.id.img_friend_state_chat_activity);
         txt_Daxem=findViewById(R.id.txt_daxem);
-        loadAnotherUser();
-        getAnotherInChat();
-
-
         recyclerView = findViewById(R.id.recycler_chat_activity);
-        LinearLayoutManager mLinearLayout = new LinearLayoutManager(this);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(mLinearLayout);
-        arrayList = new ArrayList<>();
-        adapter = new MessengerAdapter(this, arrayList, anotherUserId);
-        recyclerView.setAdapter(adapter);
-
-
-        viewModel = ViewModelProviders.of(this).get(MessengerViewModel.class);
-
-        viewModel.getLiveDataMessenger(FirebaseAuth.getInstance().getUid(), anotherUserId).observe(this, new Observer<ArrayList<Messenger>>() {
-            @Override
-            public void onChanged(ArrayList<Messenger> messengers) {
-                Log.d("trungduc", "size:" +messengers.size());
-                adapter.updateList(messengers, urlImageAnother);
-                adapter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(messengers.size() - 1);
-
-
-
-            }
-        });
-
-
-
-
         toolbar =findViewById(R.id.toolbar_chat_activity);
         setSupportActionBar(toolbar);
         img_ExitChat = findViewById(R.id.img_exit_chat);
-        img_ExitChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         edt_Content_Mess = findViewById(R.id.edt_content_messenger);
         img_sent_mess  = findViewById(R.id.btn_sent_messenger_chat_activity);
+        img_sent_img = findViewById(R.id.btn_sent_img);
+    }
+
+    private void setUpRecyclerView(){
+        LinearLayoutManager mLinearLayout = new LinearLayoutManager(this);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(mLinearLayout);
+        adapter = new MessengerAdapter(this,  anotherUserId);
+        recyclerView.setAdapter(adapter);
+        viewModel = ViewModelProviders.of(this).get(MessengerViewModel.class);
+        viewModel.getLiveDataMessenger(FirebaseAuth.getInstance().getUid(), anotherUserId).observe(this, new Observer<ArrayList<Messenger>>() {
+            @Override
+            public void onChanged(ArrayList<Messenger> messengers) {
+                adapter.updateList(messengers, urlImageAnother);
+                adapter.notifyDataSetChanged();
+                recyclerView.scrollToPosition(messengers.size() - 1);
+            }
+        });
+
+        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
+            {
+                recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                    @Override
+                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                        if ( bottom < oldBottom) {
+                            recyclerView.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    int last = recyclerView.getAdapter().getItemCount();
+                                    if (last>2){
+                                        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                                    }
+
+                                }
+                            }, 100);
+
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void evenHandler(){
+        img_sent_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CropImage.activity()
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .start(ChatActivity.this);
+            }
+        });
         img_sent_mess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,43 +174,12 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        img_sent_img = findViewById(R.id.btn_sent_img);
-        img_sent_img.setOnClickListener(new View.OnClickListener() {
+        img_ExitChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CropImage.activity()
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(ChatActivity.this);
+                finish();
             }
         });
-
-        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
-            {
-                    recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                        @Override
-                        public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                            if ( bottom < oldBottom) {
-                                recyclerView.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        int last = recyclerView.getAdapter().getItemCount();
-                                        if (last>2){
-                                            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-                                        }
-
-                                    }
-                                }, 100);
-
-                            }
-                        }
-                    });
-            }
-        });
-
-
-
     }
 
     @Override
@@ -255,8 +240,6 @@ public class ChatActivity extends AppCompatActivity {
         edt_Content_Mess.setText("");
     }
 
-
-
     private void sentMessenger(Map messageMap){
         String currenUserRef = "Messenger/" + currentUserId + "/" + anotherUserId;
         String anotherUserRef = "Messenger/" + anotherUserId + "/" + currentUserId;
@@ -275,7 +258,9 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-    private void loadAnotherUser(){
+
+
+    private void getInfoAnotherUser(){
         usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
         usersReference.child(anotherUserId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -308,24 +293,19 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
-    private void updateStateInChat(String text) {
-        Map stateInChat = new HashMap();
-        stateInChat.put("state", text);
-        databaseReference.child("StateInChat").child(currentUserId).child(anotherUserId)
-                .updateChildren(stateInChat);
-    }
+
 
     private void getAnotherInChat(){
-        databaseReference.child("StateInChat").child(anotherUserId).child(currentUserId)
+        databaseReference.child("StateInChat").child(anotherUserId).child(currentUserId).child("state")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.getValue()!=null){
                             anotherUserInChat = dataSnapshot.getValue().toString();
-                        }else {
-                            anotherUserInChat = "false";
-                        }
 
+                        }else {
+                            anotherUserInChat = "offline";
+                        }
                     }
 
                     @Override
@@ -335,7 +315,68 @@ public class ChatActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateSennLastMess(){
+    private void checkSeenMesenger(){
+        databaseReference.child("LastMess").child(currentUserId).child(anotherUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue()!=null){
+                    Messenger messenger = dataSnapshot.getValue(Messenger.class);
+                    String from = messenger.getFrom();
+                    String seen = messenger.getSeen();
+                    if (from.equals(currentUserId)){
+                        if (seen.equals("true")){
+                            txt_Daxem.setText(" đã xem tin nhắn bạn gửi");
+                            txt_Daxem.setVisibility(View.VISIBLE);
+                        }else {
+                            txt_Daxem.setText(" chưa xem tin nhắn bạn gửi");
+                            txt_Daxem.setVisibility(View.VISIBLE);
+                        }
+                    }else {
+                        txt_Daxem.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        updateStateInChat("online");  // update trang thai dang trong activitychat cua minh
+        updateSeenLastMess();               // updare tin nhan cuoi cung minh da xem
+        updateUserStatus("online");
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        updateStateInChat("offline");
+    }
+
+    private void updateStateInChat(String text) {
+        Map stateInChat = new HashMap();
+        stateInChat.put("state", text);
+        databaseReference.child("StateInChat").child(currentUserId).child(anotherUserId)
+                .updateChildren(stateInChat);
+    }
+
+    private  void updateUserStatus(String state) {
+        HashMap<String, Object> onlineStateMap = new HashMap<>();
+        onlineStateMap.put("userState", state);
+        onlineStateMap.put("userTimeState", ServerValue.TIMESTAMP);
+        stateCurrentUserReference.setValue(onlineStateMap);
+    }
+
+    private void updateSeenLastMess(){
         final Map lastMessMap = new HashMap();
         lastMessMap.put("seen", "true");
         databaseReference.child("LastMess").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -360,76 +401,7 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
     }
 
-    private void checkSeen(){
-        databaseReference.child("LastMess").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(currentUserId+"/"+anotherUserId)){
-                    Messenger messenger = dataSnapshot.child(currentUserId+"/"+anotherUserId).getValue(Messenger.class);
-                    String from = messenger.getFrom();
-                    String seen = messenger.getSeen();
-                    if (from.equals(currentUserId)){
-                        if (seen.equals("true")){
-                            txt_Daxem.setVisibility(View.VISIBLE);
-                        }else {
-                            txt_Daxem.setVisibility(View.GONE);
-                        }
-                    }else {
-                        txt_Daxem.setVisibility(View.GONE);
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-//        databaseReference.child("LastMess").child(currentUserId).child(anotherUserId)
-//                .addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        Messenger messenger = dataSnapshot.getValue(Messenger.class);
-//                        String from = messenger.getFrom();
-//                        String seen = messenger.getSeen();
-//                        if (from.equals(currentUserId)){
-//                            if (seen.equals("true")){
-//                                txt_Daxem.setVisibility(View.VISIBLE);
-//                            }else {
-//                                txt_Daxem.setVisibility(View.GONE);
-//                            }
-//                        }else {
-//                            txt_Daxem.setVisibility(View.GONE);
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                    }
-//                });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        updateStateInChat("online");
-        updateSennLastMess();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        updateStateInChat("offline");
-    }
 }

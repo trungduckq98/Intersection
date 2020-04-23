@@ -27,6 +27,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
+    private static String CURRENTUSERNAME;
+
+    public static String getCURRENTUSERNAME() {
+        return CURRENTUSERNAME;
+    }
+
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -38,7 +44,25 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         init();
+        getCurrentUserName();
         eventHandler();
+
+    }
+
+    private void getCurrentUserName(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getUid())
+                .child("UserMain").child("userDisplayName");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                CURRENTUSERNAME = dataSnapshot.getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void init(){
@@ -103,14 +127,20 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        updateUserStatus("online");
+        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
+            updateUserStatus("online");
+        }
+
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        updateUserStatus("offline");
+        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
+            updateUserStatus("offline");
+        }
+
 
     }
 

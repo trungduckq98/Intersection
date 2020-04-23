@@ -28,6 +28,9 @@ import com.deathmarch.intersection.viewmodel.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+
+import java.util.HashMap;
 
 public class OptionFragment extends Fragment {
     private View view;
@@ -39,8 +42,10 @@ public class OptionFragment extends Fragment {
     private ImageView img_Thump;
     private TextView txt_Displayname;
 
+
     private String currentUserId;
     private DatabaseReference currentUserReference;
+    private DatabaseReference stateCurrentUserReference;
     public OptionFragment() {
     }
 
@@ -65,6 +70,7 @@ public class OptionFragment extends Fragment {
         txt_Displayname = view.findViewById(R.id.txt_displayname10);
         currentUserId = FirebaseAuth.getInstance().getUid();
         currentUserReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        stateCurrentUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId).child("UserState");
     }
 
     private void eventHandler(){
@@ -85,11 +91,13 @@ public class OptionFragment extends Fragment {
         cardView_Logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updateUserStatus("offline");
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 firebaseAuth.signOut();
                 Intent intent = new Intent(getContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                getActivity().finish();
             }
         });
 
@@ -104,9 +112,16 @@ public class OptionFragment extends Fragment {
         });
     }
 
+    private  void updateUserStatus(String state) {
+        HashMap<String, Object> onlineStateMap = new HashMap<>();
+        onlineStateMap.put("userState", state);
+        onlineStateMap.put("userTimeState", ServerValue.TIMESTAMP);
+        stateCurrentUserReference.setValue(onlineStateMap);
+    }
+
     private void loadInfoCurrentUser(){
-        UserViewModel viewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-        viewModel.getLiveDataUser(FirebaseAuth.getInstance().getUid()).observe(this, new Observer<User>() {
+        UserViewModel viewModel = ViewModelProviders.of(getActivity()).get(UserViewModel.class);
+        viewModel.getLiveDataUser(FirebaseAuth.getInstance().getUid()).observe(getActivity(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 Log.d("duckq123", "data in fragment option");

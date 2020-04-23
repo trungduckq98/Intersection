@@ -22,12 +22,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MessengerAdapter extends RecyclerView.Adapter {
     private String anotherUserId;
     private Context context;
-    private ArrayList<Messenger> arrayList;
-    private String urlThump;
+    private ArrayList<Messenger> arrayList = new ArrayList<>();
+    private String urlThump="";
 
-    public MessengerAdapter(Context context, ArrayList<Messenger> arrayList, String anotherUserId) {
+    public MessengerAdapter(Context context, String anotherUserId) {
         this.context = context;
-        this.arrayList = arrayList;
         this.anotherUserId = anotherUserId;
     }
 

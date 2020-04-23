@@ -105,7 +105,7 @@ public class ListFriendFragment extends Fragment {
 
         //view model
         viewModel = ViewModelProviders.of(getActivity()).get(FriendViewModel.class);
-        viewModel.getLiveDataFriend(FirebaseAuth.getInstance().getUid()).observe(this, new Observer<ArrayList<UserMain>>() {
+        viewModel.getLiveDataFriend(FirebaseAuth.getInstance().getUid()).observe(getActivity(), new Observer<ArrayList<UserMain>>() {
             @Override
             public void onChanged(ArrayList<UserMain> userMains) {
                 Log.d("kienquoc", "FRIEND: fragment co data ");

@@ -1,10 +1,10 @@
 package com.deathmarch.intersection.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.deathmarch.intersection.CheckNetwork;
 import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.model.Comment;
 import com.deathmarch.intersection.model.GetTimeAgo;
-import com.deathmarch.intersection.model.Post;
 import com.deathmarch.intersection.model.UserMain;
+import com.deathmarch.intersection.view.AnotherUserPageActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,9 +33,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     Context context;
     ArrayList<Comment> arrayList = new ArrayList<>();
     DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+    String currentUserId;
 
     public CommentAdapter(Context context) {
         this.context = context;
+        currentUserId = FirebaseAuth.getInstance().getUid();
     }
 
     public void updateList(ArrayList<Comment> newList) {
@@ -60,13 +64,31 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserMain userMain = dataSnapshot.getValue(UserMain.class);
+                final UserMain userMain = dataSnapshot.getValue(UserMain.class);
                 Glide.with(context)
                         .load(userMain.getUserImage())
                         .placeholder(R.drawable.image_user_defalse)
                         .error(R.drawable.image_user_defalse)
                         .into(holder.img_Thump);
                 holder.txt_Displayname.setText(userMain.getUserDisplayName());
+
+                holder.img_Thump.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (CheckNetwork.check(context)){
+                            if (!userMain.getUserId().equals(currentUserId)) goAnotherUserPageActivity(userMain.getUserId());
+                        }
+                    }
+                });
+                holder.txt_Displayname.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (CheckNetwork.check(context)){
+                            if (!userMain.getUserId().equals(currentUserId)) goAnotherUserPageActivity(userMain.getUserId());
+                        }
+                    }
+                });
+
             }
 
             @Override
@@ -96,5 +118,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             txt_TimeCmt = itemView.findViewById(R.id.txt_time_comment15);
             txt_ConetenCmt = itemView.findViewById(R.id.txt_content_cmt15);
         }
+    }
+
+    private void goAnotherUserPageActivity(String anotherUserId) {
+        Intent intent = new Intent(context, AnotherUserPageActivity.class);
+        intent.putExtra("anotherUserId", anotherUserId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }

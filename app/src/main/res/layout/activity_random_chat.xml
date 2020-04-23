@@ -5,90 +5,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.ChatActivity">
+    tools:context=".view.RandomChatActivity">
     <androidx.appcompat.widget.Toolbar
         android:fitsSystemWindows="true"
         android:layout_alignParentTop="true"
-        android:id="@+id/toolbar_chat_activity"
+        android:id="@+id/toolbar33"
+        app:title="Random chat"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/back_ground">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/img_exit_chat"
-                android:src="@drawable/ic_arrow_back_black_24dp"
-                android:layout_width="25dp"
-                android:layout_height="50dp"/>
-            <RelativeLayout
-                android:layout_marginStart="12dp"
-                android:layout_width="50dp"
-                android:layout_height="50dp">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_centerInParent="true"
-                    android:id="@+id/img_thump_chat_activity"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:src="@drawable/image_user_defalse"
-                    />
-
-                <ImageView
-                    android:id="@+id/img_friend_state_chat_activity"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="2dp"
-                    android:layout_marginBottom="2dp"
-                    android:src="@drawable/iconsonline" />
-
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txt_name_friend_chat_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:textSize="18sp" />
-
-                <TextView
-                    android:id="@+id/txt_friend_state_chat_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="10sp" />
-
-            </LinearLayout>
-
-
-        </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
+    <RelativeLayout
+        android:id="@+id/rel33"
+        android:layout_below="@+id/toolbar33"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <Button
+            android:id="@+id/btn_timdoi33"
+            android:text="Tìm đối"
+            android:layout_marginEnd="4dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:textAllCaps="false"
+            android:layout_width="140dp"
+            android:layout_height="50dp"/>
+        <TextView
+            android:id="@+id/txt_state33"
+            android:visibility="gone"
+            android:textSize="14sp"
+            android:textColor="@color/colorBlue"
+            android:gravity="center"
+            android:layout_toStartOf="@+id/btn_timdoi33"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"/>
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ln_top33"
+            android:gravity="center|start"
+            android:layout_toStartOf="@+id/btn_timdoi33"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+            <TextView
+                android:gravity="center"
+                android:textSize="16sp"
+                android:text="Giới tính"
+                android:layout_width="100dp"
+                android:layout_height="60dp"/>
+            <Spinner
+                android:id="@+id/spiner33"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <RelativeLayout
-        android:layout_below="@+id/toolbar_chat_activity"
+        android:id="@+id/relative33"
+        android:visibility="invisible"
+        android:layout_below="@+id/rel33"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/ln_content"
+            android:id="@+id/ln_content33"
             android:layout_alignParentBottom="true"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/txt_daxem"
+                android:id="@+id/txt_daxem33"
                 android:visibility="gone"
                 android:gravity="end"
                 android:layout_marginEnd="4dp"
@@ -104,12 +91,13 @@
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray"/>
             <LinearLayout
+                android:id="@+id/ln_bot33"
                 android:weightSum="10"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="40dp">
                 <ImageView
-                    android:id="@+id/btn_sent_img"
+                    android:id="@+id/btn_sent_img33"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -119,7 +107,7 @@
                 <EditText
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="2dp"
-                    android:id="@+id/edt_content_messenger"
+                    android:id="@+id/edt_content_messenger33"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
@@ -134,7 +122,7 @@
                     android:singleLine="true" />
 
                 <ImageView
-                    android:id="@+id/btn_sent_messenger_chat_activity"
+                    android:id="@+id/btn_sent_messenger_chat_activity33"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -144,13 +132,15 @@
 
         </LinearLayout>
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:layout_above="@+id/ln_content"
-            android:id="@+id/_swipe_activity_chat"
+
+            android:layout_above="@+id/ln_content33"
+            android:id="@+id/_swipe_activity_chat33"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <androidx.recyclerview.widget.RecyclerView
-                android:layout_above="@+id/ln_content"
-                android:id="@+id/recycler_chat_activity"
+
+                android:layout_above="@+id/ln_content33"
+                android:id="@+id/recycler_chat_activity33"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

@@ -10,8 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:title="ChatApp"
-        app:titleTextColor="@color/colorAccent"
+        app:title="Intersection"
+        app:titleTextColor="#CF16A4"
         android:background="@drawable/back_ground">
     </androidx.appcompat.widget.Toolbar>
     <com.google.android.material.tabs.TabLayout

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -17,10 +18,16 @@ import com.deathmarch.intersection.view.CreatePostActivity;
 import com.deathmarch.intersection.view.LauncherActivity;
 import com.deathmarch.intersection.view.LoginActivity;
 import com.deathmarch.intersection.view.MyPageActivity;
+import com.deathmarch.intersection.view.RandomChatActivity;
 import com.deathmarch.intersection.view.SearchByEmailDialogFragment;
 import com.deathmarch.intersection.view.friend.FriendManagerActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
@@ -94,6 +101,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showToast(getApplicationContext(), "Trung Đức", "Đã gửi một hình ảnh");
+            }
+        });
+
+        btn9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users")
+                        .child(FirebaseAuth.getInstance().getUid()).child("UserInfo").child("userSex");
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String gioitinh = dataSnapshot.getValue().toString();
+                        Intent intent = new Intent(getApplicationContext(), RandomChatActivity.class);
+                        intent.putExtra("mySexxx", gioitinh);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 

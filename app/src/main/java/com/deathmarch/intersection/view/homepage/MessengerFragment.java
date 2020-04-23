@@ -13,18 +13,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.deathmarch.intersection.R;
-import com.deathmarch.intersection.model.GetTimeAgo;
+import com.deathmarch.intersection.adapter.FriendOnlineAdapter;
 import com.deathmarch.intersection.model.Messenger;
-import com.deathmarch.intersection.model.UserInfo;
+import com.deathmarch.intersection.model.User;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.model.UserState;
 import com.deathmarch.intersection.view.ChatActivity;
+import com.deathmarch.intersection.view.RandomChatActivity;
+import com.deathmarch.intersection.viewmodel.FriendOnlineViewModel;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,16 +38,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessengerFragment extends Fragment {
     View view;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView, rv_Online;
+    LinearLayout ln_GoRandomchat;
     String currenUserId;
     private DatabaseReference databaseReference;
     private DatabaseReference usersReference;
+
+
 
     public MessengerFragment() {
 
@@ -56,7 +64,13 @@ public class MessengerFragment extends Fragment {
         init();
         firebaseConnect();
         getListUserChat();
-
+        setUpRecyclerViewFriendOnline();
+        ln_GoRandomchat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goRandomchat();
+            }
+        });
 
 
         return view;
@@ -71,6 +85,31 @@ public class MessengerFragment extends Fragment {
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(layoutManager);
+        ln_GoRandomchat = view.findViewById(R.id.ln_gorandomchat11);
+
+        rv_Online = view.findViewById(R.id.recycler_online);
+
+
+    }
+
+    private void setUpRecyclerViewFriendOnline(){
+        final FriendOnlineAdapter adapter = new FriendOnlineAdapter(getContext());
+        rv_Online.setAdapter(adapter);
+        FriendOnlineViewModel viewModel = ViewModelProviders.of(getActivity()).get(FriendOnlineViewModel.class);
+        viewModel.getLiveDataFriendOnline(FirebaseAuth.getInstance().getUid()).observe(getActivity(), new Observer<ArrayList<User>>() {
+            @Override
+            public void onChanged(ArrayList<User> users) {
+                ArrayList<User> arrOnline = new ArrayList<>();
+                for (int i = 0; i<users.size();i++){
+                    if (users.get(i).getUserState().getUserState().equals("online")){
+                        arrOnline.add(users.get(i));
+                    }
+                    adapter.updateList(arrOnline);
+                }
+
+
+            }
+        });
     }
 
     public void firebaseConnect() {
@@ -88,6 +127,7 @@ public class MessengerFragment extends Fragment {
         FirebaseRecyclerAdapter<Messenger, UserChatViewHolder> adapter =new FirebaseRecyclerAdapter<Messenger, UserChatViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final UserChatViewHolder holder, int i, @NonNull Messenger messenger) {
+
                 if (messenger.getFrom().equals(currenUserId)){
                     holder.txt_Last_Messenger.setTextColor(Color.GREEN);
                     if (messenger.getType().equals("text")){
@@ -165,6 +205,25 @@ public class MessengerFragment extends Fragment {
 
 
 
+    }
+
+    private void goRandomchat(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users")
+                .child(FirebaseAuth.getInstance().getUid()).child("UserInfo").child("userSex");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String gioitinh = dataSnapshot.getValue().toString();
+                Intent intent = new Intent(getContext(), RandomChatActivity.class);
+                intent.putExtra("mySexxx", gioitinh);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

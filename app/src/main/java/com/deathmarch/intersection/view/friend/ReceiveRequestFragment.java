@@ -3,7 +3,6 @@ package com.deathmarch.intersection.view.friend;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,16 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.adapter.AcceptRequestFriend;
-import com.deathmarch.intersection.adapter.CountFriend;
 import com.deathmarch.intersection.adapter.ReceiveRequestAdapter;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.view.AnotherUserPageActivity;
 import com.deathmarch.intersection.viewmodel.FriendViewModel;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -76,7 +71,7 @@ public class ReceiveRequestFragment extends Fragment implements AcceptRequestFri
         //view model
 
         viewModel = ViewModelProviders.of(getActivity()).get(FriendViewModel.class);
-        viewModel.getLiveDataReceive(FirebaseAuth.getInstance().getUid()).observe(this, new Observer<ArrayList<UserMain>>() {
+        viewModel.getLiveDataReceive(FirebaseAuth.getInstance().getUid()).observe(getActivity(), new Observer<ArrayList<UserMain>>() {
             @Override
             public void onChanged(ArrayList<UserMain> userMains) {
                 adapter.updateList(userMains);

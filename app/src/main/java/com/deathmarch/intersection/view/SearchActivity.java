@@ -1,11 +1,16 @@
 package com.deathmarch.intersection.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -26,7 +31,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class SearchActivity extends AppCompatActivity {
@@ -37,6 +44,7 @@ public class SearchActivity extends AppCompatActivity {
     Toolbar toolbar_search;
     SearchView searchView;
     RecyclerView recyclerView;
+    ImageView btn_Voice;
     DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +84,48 @@ public class SearchActivity extends AppCompatActivity {
                 return false;
             }
         });
+        btn_Voice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                speak();
+            }
+        });
+
+
+    }
+
+    private void speak(){
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak");
+
+        try {
+            startActivityForResult(intent, 123);
+        }catch (Exception e){
+            Toast.makeText(this, ""+e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==123 && resultCode==RESULT_OK &&data!=null){
+            ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            String text = result.get(0);
+            searchView.setQuery(text, true);
+
+
+        }
     }
 
     private void init(){
-
         currentUserId = FirebaseAuth.getInstance().getUid();
         toolbar_search = findViewById(R.id.toolbar_search);
         searchView = findViewById(R.id.search_main);
         searchView.onActionViewExpanded();
+        btn_Voice = findViewById(R.id.btn_void);
         recyclerView = findViewById(R.id.recycler_another_user);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);

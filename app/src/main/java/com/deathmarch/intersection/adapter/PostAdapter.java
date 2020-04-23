@@ -2,6 +2,7 @@ package com.deathmarch.intersection.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.model.GetTimeAgo;
 import com.deathmarch.intersection.model.Post;
 import com.deathmarch.intersection.model.UserMain;
+import com.deathmarch.intersection.view.AnotherUserPageActivity;
 import com.deathmarch.intersection.view.PostDialogFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,17 +49,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     Context context;
     private ArrayList<Post> arrayList;
     RecyclerView recyclerView;
-
-
-    String currentUserId = FirebaseAuth.getInstance().getUid();
-    DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
-    DatabaseReference postReference = FirebaseDatabase.getInstance().getReference().child("Post");
+    String currentUserId ;
+    DatabaseReference usersReference ;
+    DatabaseReference postReference ;
+    DatabaseReference notifyReference ;
 
 
     public PostAdapter(Context context, ArrayList<Post> arrayList, RecyclerView recyclerView) {
         this.context = context;
         this.arrayList = arrayList;
         this.recyclerView = recyclerView;
+        this.currentUserId = FirebaseAuth.getInstance().getUid();
+        this.usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        this.postReference = FirebaseDatabase.getInstance().getReference().child("Post");
+        this.notifyReference = FirebaseDatabase.getInstance().getReference().child("Notify");
     }
 
     public void updateList(ArrayList<Post> newList) {
@@ -186,11 +191,49 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 if (holder.isLike==true){
                     postReference.child(post.getPostUserId()).child(post.getPostId())
                             .child("postLike").child(currentUserId).removeValue();
+
                 }else {
                     Map likeMap = new HashMap();
                     likeMap.put("likeTime", ServerValue.TIMESTAMP);
                     postReference.child(post.getPostUserId()).child(post.getPostId())
-                            .child("postLike").child(currentUserId).updateChildren(likeMap);
+                            .child("postLike").child(currentUserId).updateChildren(likeMap).addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if (task.isSuccessful()){
+                                if (!post.getPostUserId().equals(currentUserId)){
+                                    Map notifyLikeMap = new HashMap();
+                                    notifyLikeMap.put("time", ServerValue.TIMESTAMP);
+                                    notifyLikeMap.put("userId", currentUserId);
+                                    notifyLikeMap.put("seen", "false");
+                                    notifyReference.child(post.getPostUserId()).child(post.getPostId())
+                                           .child("likeNotify").updateChildren(notifyLikeMap);
+
+                                }
+                            }
+                        }
+                    });
+
+
+
+                }
+            }
+        });
+
+        holder.img_Thump.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CheckNetwork.check(context)){
+                    if (!post.getPostUserId().equals(currentUserId)) goAnotherUserPageActivity(post.getPostUserId());
+                }
+
+            }
+        });
+
+        holder.txt_Displayname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (CheckNetwork.check(context)){
+                    if (!post.getPostUserId().equals(currentUserId)) goAnotherUserPageActivity(post.getPostUserId());
                 }
             }
         });
@@ -280,6 +323,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
                                 showSnackbar("Xóa bài viết thành công");
+                                notifyReference.child(postUserId).child(postId).removeValue();
                             }
                         }
                     });
@@ -297,5 +341,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     {
         Snackbar snackbar = Snackbar.make(recyclerView, message, 2000);
         snackbar.show();
+    }
+
+    private void goAnotherUserPageActivity(String anotherUserId) {
+        Intent intent = new Intent(context, AnotherUserPageActivity.class);
+        intent.putExtra("anotherUserId", anotherUserId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }
