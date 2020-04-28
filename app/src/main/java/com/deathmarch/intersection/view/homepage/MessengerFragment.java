@@ -152,7 +152,7 @@ public class MessengerFragment extends Fragment {
 
                 final String another_user_id = getRef(i).getKey().toString();
 
-                usersReference.child(another_user_id).addListenerForSingleValueEvent(new ValueEventListener() {
+                usersReference.child(another_user_id).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         UserMain userMain = dataSnapshot.child("UserMain").getValue(UserMain.class);

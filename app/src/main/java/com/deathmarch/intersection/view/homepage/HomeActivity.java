@@ -2,6 +2,7 @@ package com.deathmarch.intersection.view.homepage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.model.Messenger;
 import com.deathmarch.intersection.view.SearchActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.util.HashMap;
 
@@ -39,14 +44,52 @@ public class HomeActivity extends AppCompatActivity {
     private TabsAccessorAdapter mytabsAccessorAdapter;
     String currentUserId;
     private DatabaseReference stateCurrentUserReference;
+    private DatabaseReference tokenReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         init();
         getCurrentUserName();
         eventHandler();
 
+      setUpToken();
+
+    }
+
+    private void setUpToken(){
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("trungduc", "getInstanceId failed", task.getException());
+                            return;
+                        }
+                        final String token = task.getResult().getToken();
+                        tokenReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getValue()!=null){
+                                    String myToken = dataSnapshot.getValue().toString();
+                                    if (!token.equals(myToken)){
+                                        tokenReference.setValue(token);
+                                    }
+                                }else {
+                                    tokenReference.setValue(token);
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+                });
     }
 
     private void getCurrentUserName(){
@@ -78,6 +121,7 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_black_24dp);
 
         currentUserId = FirebaseAuth.getInstance().getUid();
+        tokenReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId).child("userToken");
         stateCurrentUserReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId).child("UserState");
     }
 

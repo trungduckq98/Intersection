@@ -26,6 +26,7 @@ import com.deathmarch.intersection.model.GetTimeAgo;
 import com.deathmarch.intersection.model.Messenger;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.model.UserState;
+import com.deathmarch.intersection.view.homepage.HomeActivity;
 import com.deathmarch.intersection.viewmodel.MessengerViewModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -55,6 +56,7 @@ public class ChatActivity extends AppCompatActivity {
     private String anotherUserId;
 
     private String anotherUserInChat;
+    private String anotherUserIsOnl;
 
     private DatabaseReference usersReference;
     private DatabaseReference databaseReference;
@@ -255,6 +257,22 @@ public class ChatActivity extends AppCompatActivity {
         databaseMap.put(anotherLastMess, messageMap);
         databaseMap.put(currentLastMess, messageMap);
         databaseReference.updateChildren(databaseMap);
+
+        if (anotherUserIsOnl!=null){
+            if (anotherUserIsOnl.equals("offline")){
+                String content ="Đã gửi một ảnh.";
+                String type = messageMap.get("type").toString();
+                    if (type.equals("text")){
+                        content = messageMap.get("content").toString();
+                    }
+                 String myName = HomeActivity.getCURRENTUSERNAME();
+                Map notifyMap = new HashMap();
+                notifyMap.put("userSentName", myName);
+                notifyMap.put("content", content);
+                databaseReference.child("FCM").child(anotherUserId).updateChildren(notifyMap);
+            }
+
+        }
     }
 
 
@@ -274,7 +292,7 @@ public class ChatActivity extends AppCompatActivity {
                         .error(R.drawable.image_user_defalse)
                         .into(img_Thump);
                 txt_DisplayName.setText(userMain.getUserDisplayName());
-
+                anotherUserIsOnl = userState.getUserState().toString();
                 if (userState.getUserState().equals("online")) {
                     img_State.setImageResource(R.drawable.iconsonline);
                     txt_State.setText("Đang hoạt động");

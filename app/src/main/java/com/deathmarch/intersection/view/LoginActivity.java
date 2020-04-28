@@ -1,11 +1,16 @@
 package com.deathmarch.intersection.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -115,6 +120,24 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        edt_Pass_Login.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    hideKeyBoard();
+                    btn_Login.callOnClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void hideKeyBoard(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (null != getCurrentFocus())
+            imm.hideSoftInputFromWindow(getCurrentFocus()
+                    .getApplicationWindowToken(), 0);
     }
 
     private boolean isValidEmail(String email) {
