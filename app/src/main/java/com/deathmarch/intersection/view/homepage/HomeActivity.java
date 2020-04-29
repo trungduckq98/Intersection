@@ -1,6 +1,14 @@
 package com.deathmarch.intersection.view.homepage;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,10 +18,12 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.model.Messenger;
+import com.deathmarch.intersection.view.ChatActivity;
 import com.deathmarch.intersection.view.SearchActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -53,8 +63,8 @@ public class HomeActivity extends AppCompatActivity {
         init();
         getCurrentUserName();
         eventHandler();
-
-      setUpToken();
+        setUpToken();
+    //  listenerMess(currentUserId);
 
     }
 
@@ -171,9 +181,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
-            updateUserStatus("online");
-        }
+
+//        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
+//            updateUserStatus("online");
+//        }
 
 
     }
@@ -181,9 +192,9 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
-            updateUserStatus("offline");
-        }
+//        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
+//            updateUserStatus("offline");
+//        }
 
 
     }
@@ -200,7 +211,7 @@ public class HomeActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void listenerMess(){
+    private void listenerMess(final String currentUserId){
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("LastMess").child(currentUserId);
         Query query = databaseReference.orderByChild("time").limitToLast(1);
         query.addValueEventListener(new ValueEventListener() {
@@ -217,7 +228,11 @@ public class HomeActivity extends AppCompatActivity {
                                 }else {
                                     contentShow= "Đã gửi một ảnh";
                                 }
-                                // show Notification
+
+                                String anotherUserId = messenger.getFrom();
+
+
+                                createNotification(anotherUserId, contentShow);
                             }
 
                         }
@@ -231,6 +246,43 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void createNotification(String anotherUserId,  String content){
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("another_user_id",anotherUserId );
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        String channelId = getString(R.string.project_id);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setSmallIcon(R.drawable.ic_message_black_24dp)
+                        //  .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
+                        .setContentTitle("Bạn có tin nhắn mới")
+                        .setContentText(content)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(NotificationManager.IMPORTANCE_HIGH);
+
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        notificationManager.notify(0, notificationBuilder.build());
+    }
+
+
 
 
 

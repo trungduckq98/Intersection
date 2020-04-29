@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,7 +57,6 @@ public class ChatActivity extends AppCompatActivity {
     private String anotherUserId;
 
     private String anotherUserInChat;
-    private String anotherUserIsOnl;
 
     private DatabaseReference usersReference;
     private DatabaseReference databaseReference;
@@ -258,8 +258,8 @@ public class ChatActivity extends AppCompatActivity {
         databaseMap.put(currentLastMess, messageMap);
         databaseReference.updateChildren(databaseMap);
 
-        if (anotherUserIsOnl!=null){
-            if (anotherUserIsOnl.equals("offline")){
+        if (anotherUserInChat!=null){
+            if (anotherUserInChat.equals("offline")){
                 String content ="Đã gửi một ảnh.";
                 String type = messageMap.get("type").toString();
                     if (type.equals("text")){
@@ -268,6 +268,7 @@ public class ChatActivity extends AppCompatActivity {
                  String myName = HomeActivity.getCURRENTUSERNAME();
                 Map notifyMap = new HashMap();
                 notifyMap.put("userSentName", myName);
+                notifyMap.put("userSentId", currentUserId);
                 notifyMap.put("content", content);
                 databaseReference.child("FCM").child(anotherUserId).updateChildren(notifyMap);
             }
@@ -292,7 +293,6 @@ public class ChatActivity extends AppCompatActivity {
                         .error(R.drawable.image_user_defalse)
                         .into(img_Thump);
                 txt_DisplayName.setText(userMain.getUserDisplayName());
-                anotherUserIsOnl = userState.getUserState().toString();
                 if (userState.getUserState().equals("online")) {
                     img_State.setImageResource(R.drawable.iconsonline);
                     txt_State.setText("Đang hoạt động");
@@ -368,9 +368,10 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d("trungduc", "ChatActivity::start");
         updateStateInChat("online");  // update trang thai dang trong activitychat cua minh
         updateSeenLastMess();               // updare tin nhan cuoi cung minh da xem
-        updateUserStatus("online");
+      //  updateUserStatus("online");
 
     }
 
@@ -378,6 +379,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         updateStateInChat("offline");
+       // updateUserStatus("offline");
     }
 
     private void updateStateInChat(String text) {
