@@ -182,9 +182,9 @@ public class HomeActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-//        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
-//            updateUserStatus("online");
-//        }
+        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
+            updateUserStatus("online");
+        }
 
 
     }
