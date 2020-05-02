@@ -52,6 +52,7 @@ public class ListFriendFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_list_friend, container, false);
         edt_Filter = view.findViewById(R.id.edt_searchfilterfriend);
         setUpRecyclerView();
+        Log.d("ddddddddddddddd", "Frag 1");
         return view;
     }
 

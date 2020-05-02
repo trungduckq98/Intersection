@@ -56,6 +56,7 @@ public class OptionFragment extends Fragment {
         init();
         eventHandler();
         loadInfoCurrentUser();
+        Log.d("ddddddddddddddd", "opt Frag");
         return view;
 
 

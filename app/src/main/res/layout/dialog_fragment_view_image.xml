@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:background="#504E4E"
+
+        android:background="@drawable/back_ground"
         android:id="@+id/img_20"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
     <ImageView
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
         android:src="@drawable/ic_arrow_back_black_24dp"
         android:id="@+id/img_back_20"
         android:layout_width="50dp"
+        android:padding="8dp"
         android:layout_height="50dp"/>
-</FrameLayout>
+    <ImageView
+        android:layout_alignParentEnd="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_file_download_black_24dp"
+        android:id="@+id/img_save_20"
+        android:layout_width="50dp"
+        android:padding="8dp"
+        android:layout_height="50dp"/>
+</RelativeLayout>

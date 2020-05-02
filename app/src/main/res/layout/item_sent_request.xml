@@ -3,6 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     android:layout_height="90dp">
     <LinearLayout
         android:gravity="center"
@@ -16,6 +19,7 @@
             android:layout_height="84dp"/>
     </LinearLayout>
     <LinearLayout
+        android:paddingStart="8dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -28,7 +32,7 @@
                 android:textSize="18sp"
                 android:singleLine="true"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"/>
+                android:layout_height="36dp"/>
 
 
         <LinearLayout
@@ -43,7 +47,7 @@
                 android:gravity="center"
                 android:layout_weight="2"
                 android:layout_width="0dp"
-                android:layout_height="40dp">
+                android:layout_height="36dp">
                 <TextView
                     android:drawablePadding="4dp"
                     android:drawableLeft="@drawable/ic_send_black_24dp"
@@ -54,7 +58,7 @@
                     android:layout_marginEnd="2dp"
                     android:layout_marginStart="8dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"/>
+                    android:layout_height="36dp"/>
             </LinearLayout>
 
             <TextView
@@ -67,7 +71,7 @@
                 android:background="@drawable/stroke1"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="40dp"/>
+                android:layout_height="36dp"/>
         </LinearLayout>
 
     </LinearLayout>

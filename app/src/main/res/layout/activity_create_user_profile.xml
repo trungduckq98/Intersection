@@ -8,7 +8,7 @@
     android:weightSum="9"
 
     android:background="@drawable/back_ground"
-    tools:context=".CreateUserProfileActivity">
+    tools:context=".view.CreateUserProfileActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -23,6 +23,7 @@
             android:src="@drawable/meow" />
 
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -67,10 +68,12 @@
 
         <EditText
             android:drawableLeft="@drawable/ic_person_black_24dp"
+            android:background="@drawable/stroke10"
             android:id="@+id/edt_profile_displayname"
             android:hint="display name"
+            android:imeOptions="actionDone"
             android:layout_marginTop="8dp"
-            android:drawablePadding="8dp"
+            android:drawablePadding="16dp"
             android:padding="8dp"
             android:layout_width="200dp"
             android:maxLines="1"
@@ -79,6 +82,9 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"/>
         <Button
+            android:paddingStart="24dp"
+            android:paddingEnd="32dp"
+            android:background="@drawable/stroke1"
             android:layout_marginTop="16dp"
             android:id="@+id/btn_add_profile"
             android:text="add Profile"

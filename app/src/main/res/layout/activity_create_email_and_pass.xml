@@ -23,6 +23,7 @@
             android:src="@drawable/meow" />
 
         <TextView
+            android:fontFamily="@font/vast_shadow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -33,20 +34,21 @@
     </LinearLayout>
 
     <LinearLayout
-
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6">
         <com.google.android.material.textfield.TextInputLayout
+            android:background="@drawable/stroke_login"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:paddingStart="8dp"
             android:hint="Email"
-            android:layout_height="wrap_content">
+            android:layout_height="54dp">
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@null"
                 android:drawableStart="@drawable/ic_person_black_24dp"
                 android:id="@+id/edt_create_email"
                 android:drawablePadding="8dp"
@@ -56,6 +58,7 @@
                 android:layout_height="match_parent"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
+            android:background="@drawable/stroke_login"
             android:layout_width="match_parent"
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
@@ -64,11 +67,11 @@
             android:hint="Password"
             app:passwordToggleEnabled="true"
 
-            android:layout_height="wrap_content">
+            android:layout_height="54dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:inputType="textPassword"
-
+                android:background="@null"
                 android:singleLine="true"
                 android:id="@+id/edt_create_pass"
                 android:imeOptions="actionDone"
@@ -78,6 +81,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:background="@drawable/stroke_login"
             android:layout_width="match_parent"
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
@@ -86,11 +90,11 @@
             android:hint="Re Input Password"
             app:passwordToggleEnabled="true"
 
-            android:layout_height="wrap_content">
+            android:layout_height="54dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:inputType="textPassword"
-
+                android:background="@null"
                 android:singleLine="true"
                 android:id="@+id/edt_create_pass2"
                 android:imeOptions="actionDone"

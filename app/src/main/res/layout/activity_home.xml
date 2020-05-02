@@ -11,10 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:title="Intersection"
+
+        app:titleTextAppearance="@style/ToolbarFont"
         app:titleTextColor="#CF16A4"
         android:background="@drawable/back_ground">
     </androidx.appcompat.widget.Toolbar>
     <com.google.android.material.tabs.TabLayout
+        app:tabIconTint="@drawable/selected_tab"
+        app:tabBackground="@drawable/selected_tab_bg"
         android:layout_width="match_parent"
         android:id="@+id/tablayout"
         android:layout_height="50dp"

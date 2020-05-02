@@ -72,7 +72,7 @@ public class MyNotifyAdapter extends RecyclerView.Adapter<MyNotifyAdapter.MyNoti
             holder.relativeLayout.setBackgroundColor(Color.WHITE);
         }
         if (notification.getSeen().equals("false")) {
-            holder.relativeLayout.setBackgroundColor(Color.GRAY);
+            holder.relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.colorXXX));
         }
 
         GetTimeAgo getTimeAgo = new GetTimeAgo();

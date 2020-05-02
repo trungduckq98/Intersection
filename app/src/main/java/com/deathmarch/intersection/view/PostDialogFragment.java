@@ -3,7 +3,6 @@ package com.deathmarch.intersection.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +75,7 @@ public class PostDialogFragment extends DialogFragment {
     CommentAdapter adapter;
     ImageView img_option;
 
+
     public static PostDialogFragment newInstane() {
         return new PostDialogFragment();
     }
@@ -100,7 +100,6 @@ public class PostDialogFragment extends DialogFragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         Bundle bundle = getArguments();
         post = (Post) bundle.getSerializable("post");
-        Log.d("kkkkkkkkkkk", post.getPostUserId());
         init();
         loadUserCreatePost();
         eventPost();
@@ -189,6 +188,14 @@ public class PostDialogFragment extends DialogFragment {
                 goAnotherUserPage();
             }
         });
+
+        txt_Comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edt_Cmt_Content.requestFocus();
+            }
+        });
+
     }
 
     private void goAnotherUserPage(){

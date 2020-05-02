@@ -3,6 +3,7 @@ package com.deathmarch.intersection.view.homepage;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ public class MessengerFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_messenger, container, false);
+        Log.d("ddddddddddddddd", "Mess Frag");
         init();
         firebaseConnect();
         getListUserChat();
@@ -130,11 +132,13 @@ public class MessengerFragment extends Fragment {
 
                 if (messenger.getFrom().equals(currenUserId)){
                     holder.txt_Last_Messenger.setTextColor(Color.GREEN);
+                    holder.ln_item_chat.setBackgroundColor(Color.WHITE);
                     if (messenger.getType().equals("text")){
                         holder.txt_Last_Messenger.setText(messenger.getContent());
                     }else {
                         holder.txt_Last_Messenger.setText("Bạn đã gửi một ảnh");
                     }
+
                 }else {
                     holder.txt_Last_Messenger.setTextColor(Color.RED);
                     if (messenger.getType().equals("text")){
@@ -146,7 +150,7 @@ public class MessengerFragment extends Fragment {
                     if (messenger.getSeen().equals("true")){
                         holder.ln_item_chat.setBackgroundColor(Color.WHITE);
                     }else {
-                        holder.ln_item_chat.setBackgroundColor(Color.GRAY);
+                        holder.ln_item_chat.setBackgroundColor(getResources().getColor(R.color.colorXXX));
                     }
                 }
 

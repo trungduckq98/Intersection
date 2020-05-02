@@ -10,6 +10,7 @@
         android:id="@+id/toolbar_current_user_info"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        app:titleTextColor="#CF16A4"
         android:background="@drawable/back_ground">
     </androidx.appcompat.widget.Toolbar>
     <LinearLayout

@@ -10,8 +10,9 @@
         android:id="@+id/toolbar_16"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        app:titleTextColor="#CF16A4"
         app:title="ChatApp"
-        app:titleTextColor="@color/colorAccent"
+
         android:background="@drawable/back_ground"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler16"

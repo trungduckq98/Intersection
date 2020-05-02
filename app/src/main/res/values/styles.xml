@@ -20,7 +20,6 @@
     </style>
 
     <style name="ThemeDialogFragment">
-
         <item name="windowActionBar">false</item>
         <item name="colorPrimaryDark">#C5B5EA</item>
         <item name="windowNoTitle">true</item>
@@ -38,10 +37,13 @@
 
 
     <style name="ThemeImageDialogFragment">
-
         <item name="windowActionBar">false</item>
-        <item name="colorPrimaryDark">#504E4E</item>
+        <item name="colorPrimaryDark">#4D2196F3</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="ToolbarFont">
+        <item name="android:fontFamily">@font/new_rocker</item>
     </style>
 
 </resources>

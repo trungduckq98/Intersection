@@ -30,6 +30,7 @@ import com.deathmarch.intersection.model.Post;
 import com.deathmarch.intersection.model.User;
 import com.deathmarch.intersection.model.UserInfo;
 import com.deathmarch.intersection.model.UserMain;
+import com.deathmarch.intersection.model.UserState;
 import com.deathmarch.intersection.viewmodel.PostViewModel;
 import com.deathmarch.intersection.viewmodel.StateFriendViewModel;
 import com.deathmarch.intersection.viewmodel.UserViewModel;
@@ -59,6 +60,7 @@ public class AnotherUserPageActivity extends AppCompatActivity {
     private View view_kengang;
     private ImageView btn_Friend;
     private ImageView btn_NhanTin;
+    private ImageView img_StateOnl;
     String currenUserId;
     String anotherUserId;
     Toolbar toolbar;
@@ -100,6 +102,7 @@ public class AnotherUserPageActivity extends AppCompatActivity {
         btn_NhanTin = findViewById(R.id.btn_nhantin);
         ln_Not_Friend = findViewById(R.id.ln_no_friend);
         ln_Friend = findViewById(R.id.ln_friend);
+        img_StateOnl = findViewById(R.id.img_friend_state77);
         ln_ViewImage = findViewById(R.id.ln_viewimage3);
         view_kengang = findViewById(R.id.kengang_another_page);
         txt_Fullname = findViewById(R.id.txt_fullname3);
@@ -112,6 +115,7 @@ public class AnotherUserPageActivity extends AppCompatActivity {
         friendsReference = FirebaseDatabase.getInstance().getReference("Friends");
         ln_isFriend = findViewById(R.id.ln_isfriend3);
         recyclerView = findViewById(R.id.recycler3);
+
 
     }
 
@@ -159,6 +163,7 @@ public class AnotherUserPageActivity extends AppCompatActivity {
             public void onChanged(User user) {
                 UserMain userMain = user.getUserMain();
                 UserInfo userInfo = user.getUserInfo();
+                UserState userState = user.getUserState();
                 Glide.with(getApplicationContext())
                         .load(userMain.getUserImage())
                         .placeholder(R.drawable.image_user_defalse)
@@ -179,6 +184,14 @@ public class AnotherUserPageActivity extends AppCompatActivity {
                     txt_DateBirth.setText("Ngày sinh: "+"<Chưa cập nhập>");
                     txt_Sex.setText("Giới tính: "+"<Chưa cập nhập>");
                     txtDescription.setText("Mô tả: "+"<Chưa cập nhập>");
+                }
+                if (userState!=null){
+                    if (userState.getUserState().equals("online")){
+                       img_StateOnl.setVisibility(View.VISIBLE);
+
+                    }else {
+                        img_StateOnl.setVisibility(View.GONE);
+                    }
                 }
             }
         });

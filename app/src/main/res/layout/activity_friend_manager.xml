@@ -11,10 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:title="Bạn bè"
-        app:titleTextColor="@color/colorAccent"
+        app:titleTextColor="#CF16A4"
         android:background="@drawable/back_ground">
     </androidx.appcompat.widget.Toolbar>
     <com.google.android.material.tabs.TabLayout
+        app:tabTextColor="@drawable/selected_tab"
+        app:tabBackground="@drawable/selected_tab_bg"
         android:layout_width="match_parent"
         android:id="@+id/tablayout_friend_manager"
         android:layout_height="50dp"

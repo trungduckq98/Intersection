@@ -29,6 +29,7 @@ public class FriendManagerActivity extends AppCompatActivity implements CountFri
         init();
         setUpViewPager();
         setUpToolbar();
+      //  viewPager.setOffscreenPageLimit(2);
     }
     private void init(){
         toolbar =findViewById(R.id.toolbar_friend_manage);

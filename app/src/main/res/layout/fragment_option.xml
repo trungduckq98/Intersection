@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/back_ground"
     android:layout_gravity="center"
@@ -16,6 +16,8 @@
         android:paddingEnd="16dp"
         android:paddingBottom="16dp">
         <androidx.cardview.widget.CardView
+            app:cardElevation="16dp"
+            app:cardCornerRadius="8dp"
             android:id="@+id/go_my_page_10"
             android:layout_marginTop="16dp"
             android:foreground="?android:attr/selectableItemBackground"
@@ -68,6 +70,8 @@
         android:paddingBottom="16dp"
         android:layout_weight="1">
         <androidx.cardview.widget.CardView
+            app:cardElevation="8dp"
+            app:cardCornerRadius="8dp"
             android:layout_marginEnd="8dp"
             android:layout_height="match_parent"
             android:layout_width="0dp"
@@ -109,6 +113,8 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
+            app:cardElevation="8dp"
+            app:cardCornerRadius="8dp"
             android:id="@+id/cardview_image"
             android:layout_marginStart="8dp"
             android:foreground="?android:attr/selectableItemBackground"
@@ -158,6 +164,8 @@
         android:paddingBottom="16dp"
         android:layout_weight="1">
         <androidx.cardview.widget.CardView
+            app:cardElevation="8dp"
+            app:cardCornerRadius="8dp"
             android:layout_marginEnd="8dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
@@ -198,13 +206,17 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
+            app:cardElevation="8dp"
+            app:cardCornerRadius="8dp"
             android:id="@+id/cardview_logout"
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:layout_width="0dp"
+
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:layout_height="match_parent">
+
 
             <LinearLayout
                 android:layout_width="match_parent"

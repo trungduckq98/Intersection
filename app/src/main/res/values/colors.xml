@@ -12,4 +12,7 @@
     <color name="colorGray2">#A9AFAF</color>
     <color name="colorDivider">#929E98</color>
     <color name="colorPrimaryDark2">#3700B3</color>
+    <color name="colorXXX">#3D000000</color>
+    <color name="colorYYY">#14000000</color>
+
 </resources>

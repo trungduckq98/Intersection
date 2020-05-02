@@ -2,6 +2,7 @@ package com.deathmarch.intersection.view.friend;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class SendRequestFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_send_request, container, false);
         setUpRecyclerView();
+        Log.d("ddddddddddddddd", "Frag 3");
         return view;
     }
 

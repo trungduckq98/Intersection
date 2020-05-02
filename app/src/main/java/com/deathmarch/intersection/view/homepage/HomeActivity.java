@@ -64,6 +64,7 @@ public class HomeActivity extends AppCompatActivity {
         getCurrentUserName();
         eventHandler();
         setUpToken();
+        viewPager.setOffscreenPageLimit(3);
     //  listenerMess(currentUserId);
 
     }

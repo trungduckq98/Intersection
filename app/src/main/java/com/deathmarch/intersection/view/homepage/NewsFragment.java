@@ -2,6 +2,7 @@ package com.deathmarch.intersection.view.homepage;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class NewsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_news, container, false);
         setUpRecyclerViewPost();
-
+        Log.d("ddddddddddddddd", "new Frag");
 
         return view;
     }

@@ -26,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
+            android:fontFamily="@font/vast_shadow"
             android:text="Login to continue!!!"
             android:textColor="#DF185C"
             android:textSize="16sp"
@@ -42,17 +43,18 @@
         android:gravity="top"
         android:orientation="vertical">
         <com.google.android.material.textfield.TextInputLayout
+            android:background="@drawable/stroke_login"
             android:id="@+id/username"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="54dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-
             android:hint="Email"
             android:paddingStart="8dp">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@null"
                 android:id="@+id/edt_user_login"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -60,24 +62,23 @@
                 android:drawablePadding="8dp"
                 android:imeOptions="actionNext"
                 android:singleLine="true"
+                android:maxLines="1"
                 android:text="duc123@gmail.com"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-
-            android:layout_height="wrap_content"
+            android:background="@drawable/stroke_login"
+            android:layout_height="54dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-
-
             android:hint="Password"
             android:paddingStart="8dp"
             app:passwordToggleEnabled="true">
-
             <com.google.android.material.textfield.TextInputEditText
+                android:background="@null"
                 android:id="@+id/edt_password_login"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -86,8 +87,9 @@
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:singleLine="true"
+                android:maxLines="1"
                 android:text="duc123"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -152,17 +154,23 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="8dp"
-            android:background="#ffffff"
+            android:background="@drawable/stroke10"
             android:textAllCaps="false"
             android:text="Login PhoneNumber OTP" />
+
         <Button
             android:id="@+id/btn_go_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="8dp"
-            android:background="#ffffff"
-            android:text="Create New Account" />
+            android:textColor="#5E35B1"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:background="#99FFFFFF"
+            android:fontFamily="@font/vast_shadow"
+            android:text="Create New Account"
+            android:textAllCaps="false" />
     </LinearLayout>
 
 
