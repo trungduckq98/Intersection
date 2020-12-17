@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="assistant_id">05a3c624-fb58-459e-9bd6-ab9d32fe725a</string>
+    <string name="assistant_apikey">xmP_Uuu_aJWRszycE7IkL1sR6oGsgTYXpviVn1eHnBrl</string>
+    <string name="assistant_url">https://api.eu-gb.assistant.watson.cloud.ibm.com/instances/280cdaf3-a4d8-46b2-94cb-2d3e049340c9</string>
+</resources>

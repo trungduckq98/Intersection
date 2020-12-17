@@ -49,6 +49,7 @@
             android:layout_height="54dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:background="@null"
+                android:textSize="14sp"
                 android:drawableStart="@drawable/ic_person_black_24dp"
                 android:id="@+id/edt_create_email"
                 android:drawablePadding="8dp"
@@ -72,6 +73,7 @@
                 android:layout_width="match_parent"
                 android:inputType="textPassword"
                 android:background="@null"
+                android:textSize="14sp"
                 android:singleLine="true"
                 android:id="@+id/edt_create_pass"
                 android:imeOptions="actionDone"
@@ -87,6 +89,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:paddingStart="8dp"
+
             android:hint="Re Input Password"
             app:passwordToggleEnabled="true"
 
@@ -96,6 +99,7 @@
                 android:inputType="textPassword"
                 android:background="@null"
                 android:singleLine="true"
+                android:textSize="14sp"
                 android:id="@+id/edt_create_pass2"
                 android:imeOptions="actionDone"
                 android:drawableStart="@drawable/ic_lock_black_24dp"

@@ -1,14 +1,6 @@
 package com.deathmarch.intersection.view.homepage;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,12 +10,10 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.deathmarch.intersection.R;
-import com.deathmarch.intersection.model.Messenger;
-import com.deathmarch.intersection.view.ChatActivity;
+import com.deathmarch.intersection.view.CreatePostActivity;
 import com.deathmarch.intersection.view.SearchActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,7 +23,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -65,10 +54,10 @@ public class HomeActivity extends AppCompatActivity {
         eventHandler();
         setUpToken();
         viewPager.setOffscreenPageLimit(3);
-    //  listenerMess(currentUserId);
+
 
     }
-
+    //set up token id for FCM
     private void setUpToken(){
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -123,6 +112,8 @@ public class HomeActivity extends AppCompatActivity {
         toolbar =findViewById(R.id.toolbar);
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);
+
+
         mytabsAccessorAdapter = new TabsAccessorAdapter(getSupportFragmentManager(), 1);
         viewPager.setAdapter(mytabsAccessorAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -130,6 +121,8 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.iconsmessage);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_notifications_active_black_24dp);
         tabLayout.getTabAt(3).setIcon(R.drawable.ic_menu_black_24dp);
+
+
 
         currentUserId = FirebaseAuth.getInstance().getUid();
         tokenReference = FirebaseDatabase.getInstance().getReference().child("Users").child(currentUserId).child("userToken");
@@ -163,8 +156,12 @@ public class HomeActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId()== R.id.tb_search){
+                if (item.getItemId()== R.id.search_home){
                     startActivity(new Intent(getApplicationContext(), SearchActivity.class));
+                }
+                if (item.getItemId()== R.id.menu_create_post){
+                    Intent intent = new Intent(getApplicationContext(), CreatePostActivity.class);
+                    startActivity(intent);
                 }
                 return false;
             }
@@ -193,11 +190,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-//        if (FirebaseAuth.getInstance().getCurrentUser()!=null){
-//            updateUserStatus("offline");
-//        }
-
-
     }
 
     @Override
@@ -208,84 +200,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search, menu);
+        getMenuInflater().inflate(R.menu.menu_home, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
-    private void listenerMess(final String currentUserId){
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("LastMess").child(currentUserId);
-        Query query = databaseReference.orderByChild("time").limitToLast(1);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getValue()!=null){;
-                    for (DataSnapshot d :dataSnapshot.getChildren()) {
-                        Messenger messenger = d.getValue(Messenger.class);
-                        if (!messenger.getFrom().equals(currentUserId)){
-                            if (!messenger.getSeen().equals("true")){
-                                String contentShow;
-                                if (messenger.getType().equals("text")){
-                                    contentShow= messenger.getContent();
-                                }else {
-                                    contentShow= "Đã gửi một ảnh";
-                                }
-
-                                String anotherUserId = messenger.getFrom();
-
-
-                                createNotification(anotherUserId, contentShow);
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void createNotification(String anotherUserId,  String content){
-        Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("another_user_id",anotherUserId );
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-
-        String channelId = getString(R.string.project_id);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.ic_message_black_24dp)
-                        //  .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_background))
-                        .setContentTitle("Bạn có tin nhắn mới")
-                        .setContentText(content)
-                        .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent)
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setPriority(NotificationManager.IMPORTANCE_HIGH);
-
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        notificationManager.notify(0, notificationBuilder.build());
-    }
-
-
-
-
-
-
 }

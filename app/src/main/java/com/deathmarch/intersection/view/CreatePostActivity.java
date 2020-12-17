@@ -96,13 +96,10 @@ public class CreatePostActivity extends AppCompatActivity {
         textMap.put("postType", "text");
         textMap.put("postText", text);
         textMap.put("postTime", ServerValue.TIMESTAMP);
-
         final Map notifyMap = new HashMap();
         notifyMap.put("postId", postId);
         notifyMap.put("postType", "text");
         notifyMap.put("postText", text);
-
-
 
 
         myPostReference.child(postId).updateChildren(textMap).addOnCompleteListener(new OnCompleteListener() {
@@ -234,6 +231,8 @@ public class CreatePostActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
 
 

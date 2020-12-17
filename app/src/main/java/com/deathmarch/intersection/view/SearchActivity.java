@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,7 @@ import com.deathmarch.intersection.adapter.AnotherUserAdapter;
 import com.deathmarch.intersection.model.User;
 import com.deathmarch.intersection.model.UserInfo;
 import com.deathmarch.intersection.model.UserMain;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,6 +48,7 @@ public class SearchActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ImageView btn_Voice;
     DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+    FloatingActionButton fab_Search;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +95,14 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        fab_Search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment searchDialog  = SearchByEmailDialogFragment.newInstance();
+                searchDialog.show(getSupportFragmentManager(), "tag");
+            }
+        });
+
 
     }
 
@@ -135,6 +146,7 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
         adapter = new AnotherUserAdapter(getApplicationContext());
         recyclerView.setAdapter(adapter);
+        fab_Search = findViewById(R.id.fab_search);
 
     }
 

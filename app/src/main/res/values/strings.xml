@@ -1,10 +1,7 @@
 <resources>
     <string name="app_name">Intersection</string>
-    <string name="test">
-        Đoàn quân Việt Nam đi chung lòng cứu quốc, bước chân dồn vang trên đường gập ghềnh xa, cờ in máu chiến thắng mang hồn nước, súng ngoài xa chen khúc quân hành ca, đường vinh quang xây xác quân thù, thắng gian lao cùng nhau lập chiến khu, vì nhân dân chiến đấu không ngừng, tiến mau ra sa trường. Tiến lên, cùng tiến lên, nước non Việt Nam ta vững bền.
 
-Đoàn quân Việt Nam đi, sao vàng phấp phới. Dắt giống nòi quê hương qua nơi lầm lan. Cùng chung sức phấn đấu xây đời mới. Đứng đều lên gông xích ta đập tan. Từ bao lâu ta nuốt căm hờn. quyết hy sinh đời ta tươi thăm hơn. Vì nhân dân chiến đấu không ngừng. tiến mau ra sa trường. tiến lên cùng tiến lên Nước non Việt Nam ta vững bền.Đoàn quân Việt Nam đi chung lòng cứu quốc, bước chân dồn vang trên đường gập ghềnh xa, cờ in máu chiến thắng mang hồn nước, súng ngoài xa chen khúc quân hành ca, đường vinh quang xây xác quân thù, thắng gian lao cùng nhau lập chiến khu, vì nhân dân chiến đấu không ngừng, tiến mau ra sa trường. Tiến lên, cùng tiến lên, nước non Việt Nam ta vững bền
+<string name="what_s_on_your_mind">Enter your query</string>
+    <string name="menu_refresh">Refresh</string>
 
-
-    </string>
 </resources>

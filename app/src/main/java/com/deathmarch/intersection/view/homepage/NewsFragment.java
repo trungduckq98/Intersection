@@ -59,11 +59,13 @@ public class NewsFragment extends Fragment {
         adapter = new PostAdapter(getActivity(), arrayList, recyclerView);
         recyclerView.setAdapter(adapter);
         viewModel = ViewModelProviders.of(this).get(NewsViewModel.class);
-        viewModel.getLiveDataPost(FirebaseAuth.getInstance().getUid()).observe(getActivity(), new Observer<ArrayList<Post>>() {
-            @Override
-            public void onChanged(ArrayList<Post> posts) {
-                sortPostByTime(posts);
-            }
+
+        viewModel.getLiveDataPost(FirebaseAuth.getInstance().getUid()).observe(getActivity(),
+                new Observer<ArrayList<Post>>() {
+                     @Override
+                     public void onChanged(ArrayList<Post> posts) {
+                             sortPostByTime(posts);
+                    }
         });
     }
 

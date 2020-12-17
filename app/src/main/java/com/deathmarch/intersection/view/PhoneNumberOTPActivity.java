@@ -1,11 +1,9 @@
 package com.deathmarch.intersection.view;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.deathmarch.intersection.R;
 import com.deathmarch.intersection.view.homepage.HomeActivity;
@@ -86,7 +87,9 @@ public class PhoneNumberOTPActivity extends AppCompatActivity {
                     txt_mess.setText("Vui lòng nhập số điện thoại");
                     txt_mess.setVisibility(View.VISIBLE);
                 } else {
+
                     phoneNumber = ccp.getFullNumberWithPlus();
+                    Log.d("phone number", phoneNumber+"");
                     PhoneAuthProvider.getInstance().verifyPhoneNumber(phoneNumber, 60, TimeUnit.SECONDS,
                             PhoneNumberOTPActivity.this, mCallbacks);
                     btn_Get_Code.setVisibility(View.GONE);
@@ -111,14 +114,12 @@ public class PhoneNumberOTPActivity extends AppCompatActivity {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
 
-
+                Log.d("mmmmmmmmm", credential+"");
                 signInWithPhoneAuthCredential(credential);
             }
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-
-
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     loadding.setVisibility(View.GONE);
                     btn_Get_Code.setVisibility(View.VISIBLE);

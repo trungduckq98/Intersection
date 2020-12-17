@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.bumptech.glide.Glide;
 import com.deathmarch.intersection.MainActivity;
 import com.deathmarch.intersection.R;
+import com.deathmarch.intersection.chatbot.ChatBotActivity;
 import com.deathmarch.intersection.model.User;
 import com.deathmarch.intersection.model.UserMain;
 import com.deathmarch.intersection.view.MyPageActivity;
@@ -38,6 +39,7 @@ public class OptionFragment extends Fragment {
     private CardView cardView_Logout;
     private CardView cardView_Go_mypage;
     private CardView cardView_Image;
+    private CardView cardView_Setting;
 
     private ImageView img_Thump;
     private TextView txt_Displayname;
@@ -67,6 +69,7 @@ public class OptionFragment extends Fragment {
         cardView_Logout = view.findViewById(R.id.cardview_logout);
         cardView_Go_mypage= view.findViewById(R.id.go_my_page_10);
         cardView_Image = view.findViewById(R.id.cardview_image);
+        cardView_Setting = view.findViewById(R.id.cardview_settings);
         img_Thump = view.findViewById(R.id.img_thump10);
         txt_Displayname = view.findViewById(R.id.txt_displayname10);
         currentUserId = FirebaseAuth.getInstance().getUid();
@@ -109,6 +112,13 @@ public class OptionFragment extends Fragment {
                 intent.putExtra("userId", FirebaseAuth.getInstance().getUid());
                 intent.putExtra("userDisplayname", txt_Displayname.getText().toString());
                 startActivity(intent);
+            }
+        });
+
+        cardView_Setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), ChatBotActivity.class));
             }
         });
     }

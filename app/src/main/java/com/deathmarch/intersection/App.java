@@ -19,13 +19,8 @@ public class App extends Application implements  LifecycleObserver {
     @Override
     public void onCreate() {
         super.onCreate();
-      //  this.registerActivityLifecycleCallbacks(this);
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
-
-
+              ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
     }
-
-
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void onAppBackgrounded() {
@@ -42,7 +37,6 @@ public class App extends Application implements  LifecycleObserver {
             updateUserStatus(currentUserId, "online");
         }
     }
-
 
     private  void updateUserStatus(String currentUserId, String state) {
         DatabaseReference stateCurrentUserReference = FirebaseDatabase.getInstance()

@@ -164,6 +164,7 @@
         android:paddingBottom="16dp"
         android:layout_weight="1">
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardview_settings"
             app:cardElevation="8dp"
             app:cardCornerRadius="8dp"
             android:layout_marginEnd="8dp"
@@ -182,14 +183,14 @@
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:background="@drawable/oval_three"
-                    android:src="@drawable/ic_settings_white_24dp"
+                    android:src="@drawable/ic_face_black_24dp"
                     android:padding="10dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:layout_marginTop="10dp"
-                    android:text="Cài đặt"/>
+                    android:text="Chat bot"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -199,7 +200,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Cài đặt tài khoản và hệ thống"
+                    android:text="Hỏi đáp điều bạn chưa biết"
                     android:padding="5dp"
                     android:textColor="@android:color/darker_gray"/>
 

@@ -52,8 +52,6 @@ public class MessengerFragment extends Fragment {
     private DatabaseReference databaseReference;
     private DatabaseReference usersReference;
 
-
-
     public MessengerFragment() {
 
     }
